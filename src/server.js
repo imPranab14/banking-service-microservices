@@ -2,24 +2,28 @@ import express, { json } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
-import logger from "./config/logger.js";
 dotenv.config();
+import logger from "./config/logger.js";
+import limiter from "./middleware/rate-limit.middleware.js"; 
+
 
 //Express server
 const app = express();
 const port = process.env.PORT || 3000;
 
+
 // Core middlewares
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use(limiter)
 
 
 
 
 //Request logging
 app.use((req, res, next) => {
-  logger.debug(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  logger.debug(`${req.method} ${req.url}`);
   next();
 });
 
@@ -29,11 +33,11 @@ app.get("/health", (req, res) => {
 });
 
 //404 handler
-app.use((req, res, next) => {
-  logger.warn(`Resource not found ${req.method} ${req.url}`);
-  res.status(404), json({ message: "resource not found" });
-  next()
-});
+// app.use((req, res, next) => {
+//   logger.warn(`Resource not found ${req.method} ${req.url}`);
+//   res.status(404), json({ message: "resource not found" });
+//   next()
+// });
 
 //Error handler
 // app.use((error, req, res, next) => {
