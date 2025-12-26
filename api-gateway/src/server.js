@@ -23,11 +23,20 @@ app.use(express.json());
 app.use(limiter)
 
 
-app.use('/api',createProxyMiddleware({
-    target:'http://localhost:3001',
+// app.use('/api',createProxyMiddleware({
+//     target:'http://localhost:3001',
+//     changeOrigin: true,
+//    // pathFilter:'/api/v1/auth/**'
+// }))
+
+app.use(
+  "/api/users",
+  createProxyMiddleware({
+     target:'http://localhost:3001',
     changeOrigin: true,
-   // pathFilter:'/api/v1/auth/**'
-}))
+   // pathRewrite: { "^/api/users": "" },
+  })
+);
 
 //Request logging
 app.use((req, res, next) => {
