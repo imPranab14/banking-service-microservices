@@ -15,7 +15,7 @@ const logger = winston.createLogger({
     winston.format.timestamp(),
     //Log Print Formate
     winston.format.printf(({ level, message, service, timestamp }) => {
-      return `${timestamp} [${service}] ${level}: ${message}`;
+      return `${timestamp} [${service}] [${level}]: ${message}`;
     })
   ),
 
