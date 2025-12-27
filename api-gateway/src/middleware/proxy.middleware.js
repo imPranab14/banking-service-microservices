@@ -2,7 +2,7 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import logger from "../config/logger.js";
 
 function commonProxyServerFn(serviceName, target, pathRewriteURL) {
-  logger.info(`Configured proxy for [${serviceName}] at port ${target}`);
+  logger.info(`Configured proxy for [${serviceName}] at ${pathRewriteURL}`);
   return createProxyMiddleware({
     target: target, //"http://localhost:3001",
     changeOrigin: true,
