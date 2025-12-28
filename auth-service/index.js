@@ -1,7 +1,15 @@
 import express from "express";
 import redisClient from "./src/config/redis.js";
+import mongodbConnection from "./src/config/mongodb.js";
+
 
 const app = express();
+
+
+//MongoDb Connection Function
+mongodbConnection()
+
+
 app.get("/register", async (req, res) => {
   const clientRes = await redisClient.ping();
   console.log("ping redis", clientRes);
