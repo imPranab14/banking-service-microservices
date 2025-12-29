@@ -4,8 +4,12 @@ dotenv.config()
 import redisClient from "./src/config/redis.js";
 import mongodbConnection from "./src/config/mongodb.js";
 import indexRouter from "./src/router/index.route.js";
+import authRouter from "./src/router/auth.route.js";
+import bodyParser from "body-parser";
 
 const app = express();
+app.use(express.json())
+app.use(bodyParser.urlencoded())
 
 
 //MongoDb Connection Function
@@ -13,6 +17,7 @@ mongodbConnection()
 
 //Import Router
 app.use('/',indexRouter)
+app.use('/',authRouter)
 
 
 app.get("/register", async (req, res) => {
