@@ -1,13 +1,18 @@
 import express from "express";
+import dotenv from "dotenv";
+dotenv.config()
 import redisClient from "./src/config/redis.js";
 import mongodbConnection from "./src/config/mongodb.js";
-
+import indexRouter from "./src/router/index.route.js";
 
 const app = express();
 
 
 //MongoDb Connection Function
 mongodbConnection()
+
+//Import Router
+app.use('/',indexRouter)
 
 
 app.get("/register", async (req, res) => {
@@ -22,5 +27,5 @@ app.get("/register", async (req, res) => {
 });
 
 app.listen(3001, () => {
-  console.log("auth service running on 3001");
+  console.log("Auth service running on 3001");
 });
