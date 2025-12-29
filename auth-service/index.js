@@ -6,9 +6,11 @@ import mongodbConnection from "./src/config/mongodb.js";
 import indexRouter from "./src/router/index.route.js";
 import authRouter from "./src/router/auth.route.js";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
+app.use(cookieParser())
 app.use(bodyParser.urlencoded())
 
 

@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { handelUserRegister } from "../controller/auth.controller.js";
+import { handelLoginUser, handelUserRegister } from "../controller/auth.controller.js";
 
 
 const authRouter=Router()
 
 authRouter.post('/register',handelUserRegister)
+authRouter.post('/login',handelLoginUser)
 
 
 
