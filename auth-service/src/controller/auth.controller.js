@@ -5,7 +5,6 @@ import generatedToken from "../config/generatedToken.js";
 import redisClient from "../config/redis.js";
 import cookieParser from "cookie-parser";
 
-
 //Register Handeler
 async function handelUserRegister(req, res) {
   const { name, email, password } = req.body;
@@ -31,7 +30,6 @@ async function handelUserRegister(req, res) {
     statusCode: 201,
   });
 }
-
 
 //Login Handeler
 async function handelLoginUser(req, res) {
@@ -60,9 +58,13 @@ async function handelLoginUser(req, res) {
   //Generated Token
   const token = await generatedToken(email);
   const tokenSaveRedis = await redisClient.setEx("token", 60 * 60, token);
-  
-//   const cookieParser= await cookieParser.signedCookie("sdfhsd","sdfsdf")
-//   console.log("cookieParser",cookieParser);
+
+  //Set Cookies in header
+  res.cookie("token", token, {
+    maxAge: 60 * 1000, // 1 minute
+    httpOnly: true,
+    secure: true, // use true in production (HTTPS)
+  });
 
   res.send({
     message: "ok",
@@ -70,4 +72,20 @@ async function handelLoginUser(req, res) {
   });
 }
 
-export { handelUserRegister, handelLoginUser };
+//Logout Handeler
+async function handelLogout(req,res){
+   
+    //Delete form redis
+    const deleteRedis=await redisClient.del("token")
+    //After successfully delete redis return 1
+    //Delete form cookies
+    
+
+    console.log("headerTokne",deleteRedis);
+    res.send({
+        "message":'logout'
+    })
+
+
+}
+export { handelUserRegister, handelLoginUser,handelLogout };
