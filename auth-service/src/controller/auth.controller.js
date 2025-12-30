@@ -60,8 +60,6 @@ async function handelLoginUser(req, res) {
   //Redis Token Expiers in 1hour
   const tokenSaveRedis = await redisClient.setEx("token", 60 * 60, token);
 
-  console.log("tokenSaveRedis", tokenSaveRedis);
-
   if (tokenSaveRedis != "OK")
     res.status(500).json({ message: "Failed to save token in redis client" });
 
@@ -89,13 +87,15 @@ async function handelLoginUser(req, res) {
 //Logout Handeler
 async function handelLogout(req, res) {
   //Delete form redis
-  const deleteRedis = await redisClient.del("token");
   //After successfully delete redis return 1
+  const deleteRedis = await redisClient.del("token");
+
   //Delete form cookies
 
-  console.log("headerTokne", deleteRedis);
-  res.send({
-    message: "logout",
+  res.status(200).json({
+    success: true,
+    message: "Logout successful",
   });
 }
+
 export { handelUserRegister, handelLoginUser, handelLogout };
