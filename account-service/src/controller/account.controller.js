@@ -32,7 +32,7 @@ async function handelCreateNewAccount(req, res) {
       balance: 0,
       currency: "INR",
     };
-    
+
     //Save database
     const savedAccount = await account.insertOne(createAccountPayload);
 
@@ -50,4 +50,29 @@ async function handelCreateNewAccount(req, res) {
   }
 }
 
-export { handelCreateNewAccount };
+//list of account
+async function handelListOfAccount(req, res) {
+  //check account exits or not
+  try {
+    const findUser = await account.find({
+      email: req.emailId,
+    });
+    if (findUser) {
+      return res.status(200).json({
+        message: `list of account`,
+        data: findUser,
+      });
+    } else {
+      return res.status(200).json({
+        message: `no account present `,
+      });
+    }
+  } catch (error) {
+    console.error("list of account error:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+}
+
+export { handelCreateNewAccount,handelListOfAccount };
