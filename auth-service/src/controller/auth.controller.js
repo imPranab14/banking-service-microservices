@@ -57,35 +57,45 @@ async function handelLoginUser(req, res) {
 
   //Generated Token
   const token = await generatedToken(email);
+  //Redis Token Expiers in 1hour
   const tokenSaveRedis = await redisClient.setEx("token", 60 * 60, token);
+
+  console.log("tokenSaveRedis", tokenSaveRedis);
+
+  if (tokenSaveRedis != "OK")
+    res.status(500).json({ message: "Failed to save token in redis client" });
 
   //Set Cookies in header
   res.cookie("token", token, {
-    maxAge: 60 * 1000, // 1 minute
+    maxAge: 60 * 60 * 1000, // 1 hour
     httpOnly: true,
     secure: true, // use true in production (HTTPS)
   });
 
   res.send({
-    message: "ok",
-    token,
+    success: true,
+    message: "Login successfully",
+    data: {
+      name: isEmail?.name,
+      email: isEmail?.email,
+      accessToken: token,
+      tokenType: "Bearer",
+    },
+
+    status: 200,
   });
 }
 
 //Logout Handeler
-async function handelLogout(req,res){
-   
-    //Delete form redis
-    const deleteRedis=await redisClient.del("token")
-    //After successfully delete redis return 1
-    //Delete form cookies
-    
+async function handelLogout(req, res) {
+  //Delete form redis
+  const deleteRedis = await redisClient.del("token");
+  //After successfully delete redis return 1
+  //Delete form cookies
 
-    console.log("headerTokne",deleteRedis);
-    res.send({
-        "message":'logout'
-    })
-
-
+  console.log("headerTokne", deleteRedis);
+  res.send({
+    message: "logout",
+  });
 }
-export { handelUserRegister, handelLoginUser,handelLogout };
+export { handelUserRegister, handelLoginUser, handelLogout };
