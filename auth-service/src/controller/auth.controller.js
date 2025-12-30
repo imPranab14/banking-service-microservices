@@ -91,6 +91,7 @@ async function handelLogout(req, res) {
   const deleteRedis = await redisClient.del("token");
 
   //Delete form cookies
+  res.clearCookie("token");
 
   res.status(200).json({
     success: true,

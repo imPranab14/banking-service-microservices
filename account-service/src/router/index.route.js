@@ -6,7 +6,7 @@ const indexRouter =Router()
 indexRouter.get('/health',(req,res)=>{
     console.log("req auth health endpoint");
     res.status(200).json({
-        "message":"auth service is running"
+        "message":"account service is running"
     })
 })
 

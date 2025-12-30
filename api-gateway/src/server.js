@@ -16,7 +16,6 @@ const port = process.env.PORT || 3000;
 // Core middlewares
 app.use(helmet());
 app.use(cors());
-app.use(express.json());
 app.use(limiter);
 
 
@@ -45,14 +44,14 @@ app.use(
 app.use(
   commonProxyServerFn(
     "Accounts Service",
-    process.env.ACCOUNTS_SERVICE_URL || "http://localhost:3001",
+    process.env.ACCOUNTS_SERVICE_URL || "http://localhost:3002",
     "^/api/v1/accounts"
   )
 );
 app.use(
   commonProxyServerFn(
     "Transaction Service",
-    process.env.TRANSACTION_SERVICE_URL || "http://localhost:3001",
+    process.env.TRANSACTION_SERVICE_URL || "http://localhost:3003",
     "^/api/v1/transaction"
   )
 );
