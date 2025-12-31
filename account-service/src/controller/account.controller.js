@@ -6,8 +6,9 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import account from "../model/account.model.js";
 import generatedAccountNumber from "../config/uniqueAccountNumber.js";
+import { de } from "zod/v4/locales";
 
-// create a new account
+// create a new bank account
 async function handelCreateNewAccount(req, res) {
   const { accountType } = req?.body;
 
@@ -50,7 +51,7 @@ async function handelCreateNewAccount(req, res) {
   }
 }
 
-//list of account
+//list of bank account
 async function handelListOfAccount(req, res) {
   //check account exits or not
   try {
@@ -75,4 +76,101 @@ async function handelListOfAccount(req, res) {
   }
 }
 
-export { handelCreateNewAccount,handelListOfAccount };
+//delete user bank account
+async function handelDeleteBankAccount(req, res) {
+  const accountNumder = req.query?.accountNumber;
+  //if account number not enter
+  if (!accountNumder)
+    res.status(400).json({ message: "Account number is required" });
+
+  //account not exists in database
+  const findAccount = await account.findOne({
+    accountNumber: accountNumder,
+  });
+  if (!findAccount)
+    res.status(400).json({ message: "Account not exists in db" });
+
+  //Delete form database
+  const deleteAccountNumber = await account.deleteOne({
+    accountNumber: accountNumder,
+  });
+
+  //Api Response
+  res.status(200).send({
+    message: "Account deleted successfully",
+    data: deleteAccountNumber,
+  });
+}
+
+//Internal transaction
+async function handelTransaction(req, res) {
+  const { accountNumber, amount, type } = req?.body;
+
+  //if input fields is missing
+  if (!accountNumber || !amount || !type)
+    res.status(400).json({ message: "Required input fields are missing" });
+
+  const convertIntoTwoDecimal = amount.toFixed(0);
+
+  console.log("convertIntoTwoDecimal", convertIntoTwoDecimal);
+  //db call
+  try {
+    //Check the account number
+    const accountDetails = await account.findOne({
+      accountNumber: accountNumber,
+    });
+    if (!accountDetails) res.send({ message: "not a valid account number" });
+
+    //debit balance
+    if (type.toLowerCase() === "debit") {
+      console.log("accountDetails.balance > convertIntoTwoDecimal",accountDetails.balance >= convertIntoTwoDecimal,accountDetails.balance, convertIntoTwoDecimal);
+      if (accountDetails.balance > convertIntoTwoDecimal) {
+        //if balence is zero
+        const debitAmount = await account.findOneAndUpdate(
+          { accountNumber: accountNumber },
+          { $inc: { balance: -convertIntoTwoDecimal } },
+          { new: true }
+        );
+        return res.status(200).json({
+          message: "amount debit successfully",
+          data: {
+            account: accountNumber,
+            balance: debitAmount,
+          },
+        });
+      } else {
+        res.send({
+          message: "insufficient balance",
+        });
+      }
+    }
+    //credit balance
+    else if (type.toLowerCase() === "credit") {
+      const creditAmount = await account.findOneAndUpdate(
+        { accountNumber: accountNumber },
+        { $inc: { balance: convertIntoTwoDecimal } },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        message: "amount credit successfully",
+        data: creditAmount,
+      });
+    } else {
+      return res.status(200).json({
+        message: "acconut typr error",
+      });
+    }
+  } catch (error) {
+    console.error("transaction failed:", error);
+    return res.status(500).json({
+      message: "transaction failed",
+    });
+  }
+}
+export {
+  handelCreateNewAccount,
+  handelListOfAccount,
+  handelDeleteBankAccount,
+  handelTransaction,
+};

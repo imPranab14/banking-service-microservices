@@ -13,9 +13,6 @@ const app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-
-
-
 //MongoDb Connection Function
 mongodbConnection()
 
@@ -23,9 +20,15 @@ mongodbConnection()
 app.use('/',indexRouter)
 app.use('/',accountRouter)
 
+app.get('/test',(req,res)=>{
+  res.send({
+    message:"test route is running"
+  })
+})
+
 
 
 const port=process.env.PORT || 3002
 app.listen(port, () => {
-  console.log(`Auth service running on ${port}`);
+  console.log(`Account service running on ${port}`);
 });
