@@ -22,7 +22,7 @@ app.use('/',authRouter)
 
 
 
-
-app.listen(3001, () => {
-  console.log("Auth service running on 3001");
+const port =process.env.PORT 
+app.listen(port, () => {
+  console.log(`Auth service running on ${port}`);
 });

@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import logger from "./config/logger.js";
 import limiter from "./middleware/rate-limit.middleware.js";
-import { createProxyMiddleware } from "http-proxy-middleware";
 import commonProxyServerFn from "./middleware/proxy.middleware.js";
 //import apiProxy from "./config/services.js";
 
@@ -34,14 +33,15 @@ app.get("/health", (req, res) => {
 
 
 //Proxy Middleware
-app.use(
+app.use('/api/v1/auth',
   commonProxyServerFn(
     "Auth Service",
     process.env.AUTH_SERVICE_URL || "http://localhost:3001",
     "^/api/v1/auth"
   )
 );
-app.use(
+
+app.use('/api/v1/accounts',
   commonProxyServerFn(
     "Accounts Service",
     process.env.ACCOUNTS_SERVICE_URL || "http://localhost:3002",
@@ -49,7 +49,7 @@ app.use(
   )
 );
 app.use(
-  commonProxyServerFn(
+  commonProxyServerFn('/api/v1/transaction',
     "Transaction Service",
     process.env.TRANSACTION_SERVICE_URL || "http://localhost:3003",
     "^/api/v1/transaction"
