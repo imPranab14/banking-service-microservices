@@ -1,6 +1,5 @@
 import { Router } from "express";
 
-import verifyToken from "../config/verifyToken.js";
 import {
   handelCreateNewAccount,
   handelDeleteBankAccount,
@@ -10,11 +9,11 @@ import {
 
 const accountRouter = Router();
 
-accountRouter.post("/account", verifyToken, handelCreateNewAccount);
-accountRouter.get("/list", verifyToken, handelListOfAccount);
-accountRouter.delete("/deleteAccount", verifyToken, handelDeleteBankAccount);
+accountRouter.post("/account",handelCreateNewAccount);
+accountRouter.get("/list",handelListOfAccount);
+accountRouter.delete("/deleteAccount",handelDeleteBankAccount);
 
 //intrenal transaction 
-accountRouter.post('/internal/transaction',verifyToken,handelTransaction)
+accountRouter.post('/internal/transaction',handelTransaction)
 
 export default accountRouter;

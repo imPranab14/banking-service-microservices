@@ -11,13 +11,16 @@ import { de } from "zod/v4/locales";
 // create a new bank account
 async function handelCreateNewAccount(req, res) {
   const { accountType } = req?.body;
+  //get user form req header
+  const userEmail = req.headers["x-user-email"];
 
   //check account exits or not
   try {
     const findUser = await account.findOne({
-      email: req.emailId,
+      email: userEmail,
       accountType: accountType,
     });
+    console.log("findUser", findUser);
     if (findUser) {
       return res.status(400).json({
         message: `${accountType} account already present`,
@@ -26,7 +29,7 @@ async function handelCreateNewAccount(req, res) {
     }
     //create a account payload
     const createAccountPayload = {
-      email: req.emailId,
+      email: userEmail,
       accountNumber: generatedAccountNumber(accountType),
       accountType: accountType,
       accountStatus: "active",
@@ -53,10 +56,12 @@ async function handelCreateNewAccount(req, res) {
 
 //list of bank account
 async function handelListOfAccount(req, res) {
+   //get user form req header
+  const userEmail = req.headers["x-user-email"];
   //check account exits or not
   try {
     const findUser = await account.find({
-      email: req.emailId,
+      email: userEmail,
     });
     if (findUser) {
       return res.status(200).json({
@@ -123,7 +128,12 @@ async function handelTransaction(req, res) {
 
     //debit balance
     if (type.toLowerCase() === "debit") {
-      console.log("accountDetails.balance > convertIntoTwoDecimal",accountDetails.balance >= convertIntoTwoDecimal,accountDetails.balance, convertIntoTwoDecimal);
+      console.log(
+        "accountDetails.balance > convertIntoTwoDecimal",
+        accountDetails.balance >= convertIntoTwoDecimal,
+        accountDetails.balance,
+        convertIntoTwoDecimal
+      );
       if (accountDetails.balance > convertIntoTwoDecimal) {
         //if balence is zero
         const debitAmount = await account.findOneAndUpdate(

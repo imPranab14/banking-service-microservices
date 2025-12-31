@@ -6,6 +6,7 @@ dotenv.config();
 import logger from "./config/logger.js";
 import limiter from "./middleware/rate-limit.middleware.js";
 import commonProxyServerFn from "./middleware/proxy.middleware.js";
+import verifyToken from "./middleware/verifyToken.middleware.js";
 //import apiProxy from "./config/services.js";
 
 //Express server
@@ -16,7 +17,7 @@ const port = process.env.PORT || 3000;
 app.use(helmet());
 app.use(cors());
 app.use(limiter);
-
+app.use(verifyToken)
 
 
 //Request logging

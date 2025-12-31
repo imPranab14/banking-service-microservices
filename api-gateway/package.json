@@ -9,6 +9,7 @@
     "init": "^0.1.2",
     "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.3",
+    "redis": "^5.10.0",
     "winston": "^3.19.0"
   },
   "name": "banking-service-microservices",
