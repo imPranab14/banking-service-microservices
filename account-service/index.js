@@ -7,6 +7,7 @@ import indexRouter from "./src/router/index.route.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import accountRouter from "./src/router/accont.route.js";
+import verifyGatewayToken from "./src/middleware/verifyGatewayToken.js";
 
 const app = express();
 // Increase body size limits
@@ -15,6 +16,8 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 //MongoDb Connection Function
 mongodbConnection()
+//Verify Internal Gateway Token
+app.use(verifyGatewayToken)
 
 //Import Router
 app.use('/',indexRouter)

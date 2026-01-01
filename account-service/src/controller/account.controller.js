@@ -11,6 +11,7 @@ import { de } from "zod/v4/locales";
 // create a new bank account
 async function handelCreateNewAccount(req, res) {
   const { accountType } = req?.body;
+  //console.log("req.headers",req.headers);
   //get user form req header
   const userEmail = req.headers["x-user-email"];
 
@@ -20,7 +21,6 @@ async function handelCreateNewAccount(req, res) {
       email: userEmail,
       accountType: accountType,
     });
-    console.log("findUser", findUser);
     if (findUser) {
       return res.status(400).json({
         message: `${accountType} account already present`,

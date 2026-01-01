@@ -8,12 +8,18 @@ function commonProxyServerFn(serviceName, target, pathRewriteURL) {
     changeOrigin: true,
     // Time limit for client → API Gateway connection
     // If the client request takes more than 5 seconds, it will be closed
-    timeout: 5000,
+    //timeout: 5000,
     // Time limit for API Gateway → Microservice response
     // If the backend service does not respond within 5 seconds, request fails
-    proxyTimeout: 5000,
+    //proxyTimeout: 5000,
     pathRewrite: {
       [pathRewriteURL]: "",
+    },
+    //privet routed internal service Token
+    on:{
+      proxyReq:(proxyReq, req, res)=>{
+        proxyReq.setHeader('x-internal-token',process.env.INTERNAL_SERVICE_TOKEN)
+      }
     },
     onError(err, req, res) {
       console.error("Proxy error:", err.message);

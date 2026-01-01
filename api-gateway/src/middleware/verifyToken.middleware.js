@@ -35,7 +35,7 @@ async function verifyToken(req, res, next) {
     }
     //Attach data to request header
     req.headers["x-user-email"] = decode.emailId;
-    req.headers["x-access-token"] = token;
+    //req.headers["x-internal-token"]=process.env.INTERNAL_SERVICE_TOKEN
     next();
   } catch (error) {
     console.log("Token verify error", error);
