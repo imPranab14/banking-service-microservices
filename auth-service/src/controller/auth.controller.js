@@ -58,7 +58,11 @@ async function handelLoginUser(req, res) {
   //Generated Token
   const token = await generatedToken(email);
   //Redis Token Expiers in 1hour
-  const tokenSaveRedis = await redisClient.setEx("token", 60 * 60, token);
+  const tokenSaveRedis = await redisClient.setEx(
+    `token-${email}`,
+    60 * 60,
+    token
+  );
 
   if (tokenSaveRedis != "OK")
     res.status(500).json({ message: "Failed to save token in redis client" });
@@ -88,8 +92,19 @@ async function handelLoginUser(req, res) {
 async function handelLogout(req, res) {
   //Delete form redis
   //After successfully delete redis return 1
-  const deleteRedis = await redisClient.del("token");
 
+  const deleteRedis = await redisClient.del(
+    `token-${req.headers["x-user-email"]}`
+  );
+  console.log("deleteRedis", !deleteRedis);
+  if (!deleteRedis) {
+    return res
+      .status(500)
+      .send({
+        message: "Logout completed with warnings",
+        details: "Failed to delete token from Redis",
+      });
+  }
   //Delete form cookies
   res.clearCookie("token");
 

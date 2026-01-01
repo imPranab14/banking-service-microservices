@@ -24,7 +24,7 @@ async function verifyToken(req, res, next) {
     const decode = jwt.verify(token, process.env.JWT_SECRET);
 
     //Check token in redis
-    const redisToken = await redisClient.get("token");
+    const redisToken = await redisClient.get(`token-${decode.emailId}`);
 
     //if token not in redis
     if (!redisToken) {
@@ -35,7 +35,7 @@ async function verifyToken(req, res, next) {
     }
     //Attach data to request header
     req.headers["x-user-email"] = decode.emailId;
-    //req.headers["x-internal-token"]=process.env.INTERNAL_SERVICE_TOKEN
+    
     next();
   } catch (error) {
     console.log("Token verify error", error);
