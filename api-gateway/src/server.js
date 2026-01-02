@@ -36,7 +36,7 @@ app.get("/health", (req, res) => {
 //Proxy Middleware
 app.use('/api/v1/auth',
   commonProxyServerFn(
-    "Auth Service",
+    "auth service",
     process.env.AUTH_SERVICE_URL || "http://localhost:3001",
     "^/api/v1/auth"
   )

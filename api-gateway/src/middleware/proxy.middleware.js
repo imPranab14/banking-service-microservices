@@ -1,5 +1,7 @@
 import { createProxyMiddleware } from "http-proxy-middleware";
 import logger from "../config/logger.js";
+import internalToken from "../utils/generatedToken.js";
+
 
 function commonProxyServerFn(serviceName, target, pathRewriteURL) {
   logger.info(`Configured proxy for [${serviceName}] at ${pathRewriteURL}`);
@@ -18,7 +20,8 @@ function commonProxyServerFn(serviceName, target, pathRewriteURL) {
     //privet routed internal service Token
     on:{
       proxyReq:(proxyReq, req, res)=>{
-        proxyReq.setHeader('x-internal-token',process.env.INTERNAL_SERVICE_TOKEN)
+        proxyReq.setHeader('x-internal-token',process.env.INTERNAL_REQ_HEADER)
+        //proxyReq.setHeader('jwt-internal-token',internalToken(serviceName))
       }
     },
     onError(err, req, res) {
