@@ -33,6 +33,7 @@ async function handelUserRegister(req, res) {
 
 //Login Handeler
 async function handelLoginUser(req, res) {
+  console.log('login_input',req.body);
   const { email, password } = req.body;
   if (!email || !password)
     res.status(400), json({ message: "input field missing" });

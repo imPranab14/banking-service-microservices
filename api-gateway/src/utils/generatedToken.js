@@ -11,7 +11,7 @@ function internalToken(tergetService) {
     },
     //JWT Secret
     process.env.GATEWAY_JWT_SECRET,
-    { expiresIn: '30' }
+    { expiresIn: '30m' }
   );
   return jwtToken;
 }

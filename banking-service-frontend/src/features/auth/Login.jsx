@@ -1,15 +1,17 @@
 import React, { useState } from "react";
+import { loginUser } from "../../api/auth.api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  function handelLogin(e) {
+  async function handelLogin(e) {
     e.preventDefault();
     const loginData = {
-      email,
-      password,
+      email:"Friedrich47@yahoo.com",
+      password:"123",
     };
-    console.log("Form Submit", loginData);
+    const loginRes= await loginUser(loginData)
+    console.log('loginRes',loginRes);
   }
 
   return (

@@ -21,7 +21,7 @@ function commonProxyServerFn(serviceName, target, pathRewriteURL) {
     on:{
       proxyReq:(proxyReq, req, res)=>{
         proxyReq.setHeader('x-internal-token',process.env.INTERNAL_REQ_HEADER)
-        //proxyReq.setHeader('jwt-internal-token',internalToken(serviceName))
+        proxyReq.setHeader('jwt-internal-token',internalToken(serviceName))
       }
     },
     onError(err, req, res) {
