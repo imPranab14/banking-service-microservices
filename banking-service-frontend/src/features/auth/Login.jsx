@@ -16,6 +16,7 @@ const Login = () => {
 
   return (
     <>
+    <div className="flex">
       <form onSubmit={handelLogin}>
         <input
           type="email"
@@ -29,6 +30,7 @@ const Login = () => {
         />
         <input type="submit" />
       </form>
+      </div>
     </>
   );
 };
