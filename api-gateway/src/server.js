@@ -47,7 +47,7 @@ app.use('/api/v1/auth',
 
 app.use('/api/v1/accounts',
   commonProxyServerFn(
-    "Accounts Service",
+    "accounts service",
     process.env.ACCOUNTS_SERVICE_URL || "http://localhost:3002",
     "^/api/v1/accounts"
   )
