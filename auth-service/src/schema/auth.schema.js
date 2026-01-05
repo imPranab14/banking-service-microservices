@@ -5,4 +5,10 @@ const LoginSchema = z.object({
   password: z.string(),
 });
 
-export { LoginSchema };
+const RegisterSchema = z.object({
+  name: z.string(),
+  email: z.email("Invalid email format"),
+  password: z.string(),
+});
+
+export { LoginSchema,RegisterSchema };

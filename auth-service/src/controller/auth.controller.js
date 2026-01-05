@@ -4,34 +4,40 @@ import bcrypt from "bcrypt";
 import generatedToken from "../config/generatedToken.js";
 import redisClient from "../config/redis.js";
 import cookieParser from "cookie-parser";
-import { LoginSchema } from "../schema/auth.schema.js";
+import { LoginSchema, RegisterSchema } from "../schema/auth.schema.js";
 import { ApiError } from "../util/ApiError.js";
 import { ApiResponse } from "../util/ApiResponse.js";
 
 //Register Handeler
 async function handelUserRegister(req, res) {
-  const { name, email, password } = req.body;
-  if (!name || !email || !password)
-    res.status(400).json({ message: "input field missing" });
-
-  //Hash Password
-  const hashPassword = await bcrypt.hash(password, 10);
-
-  const userPayload = await User.insertOne({
-    name,
-    email,
-    password: hashPassword,
-  });
-
-  //Api Response
-  res.status(201).json({
-    message: "new user create successfully",
-    user: {
-      name: userPayload.name,
-      email: userPayload.email,
-    },
-    statusCode: 201,
-  });
+  //Zod Validation
+  const data = RegisterSchema.safeParse(req?.body);
+  try {
+    if (!data.success) {
+      return res
+        .status(400)
+        .send(new ApiError(400, "input field missing", data.error._zod.def));
+    }
+    const { name, email, password } = data.data;
+    //Hash Password
+    const hashPassword = await bcrypt.hash(password, 10);
+    const saveData = await User.insertOne({
+      name,
+      email,
+      password: hashPassword,
+    });
+  
+    //register api response
+    res.status(201).json(
+      new ApiResponse(201, "new user create successfully", {
+        name: saveData.name,
+        email: saveData.email,
+      })
+    );
+  } catch (error) {
+    console.log("Register Service Error", error);
+    res.status(500).send(new ApiError(500, "Intrenal Server Error", error));
+  }
 }
 
 //Login Handeler
