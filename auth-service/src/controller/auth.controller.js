@@ -6,6 +6,7 @@ import redisClient from "../config/redis.js";
 import cookieParser from "cookie-parser";
 import { LoginSchema } from "../schema/auth.schema.js";
 import { ApiError } from "../util/ApiError.js";
+import { ApiResponse } from "../util/ApiResponse.js";
 
 //Register Handeler
 async function handelUserRegister(req, res) {
@@ -59,7 +60,7 @@ async function handelLoginUser(req, res) {
     const comparePassword = await bcrypt.compare(password, isEmail.password);
     //Valid password or not
     if (!comparePassword)
-      res.status(400).json({ message: "Password not valid" });
+      res.status(400).json(new ApiResponse(400, "Password not vaild"));
 
     //Generated Token
     const token = await generatedToken(email);
@@ -69,10 +70,14 @@ async function handelLoginUser(req, res) {
       60 * 60,
       token
     );
-
     if (tokenSaveRedis != "OK")
-      res.status(500).json({ message: "Failed to save token in redis client" });
-
+      res
+        .status(500)
+        .json(
+          res
+            .status(400)
+            .json(new ApiResponse(400, "Failed to save token in redis client"))
+        );
     //Set Cookies in header
     res.cookie("token", token, {
       maxAge: 60 * 60 * 1000, // 1 hour
@@ -80,17 +85,15 @@ async function handelLoginUser(req, res) {
       secure: true, // use true in production (HTTPS)
     });
 
-    res.send({
-      success: true,
-      message: "Login successfully",
-      data: {
+    //Login successfully json response
+    res.status(200).send(
+      new ApiResponse(200, "Login successfully", {
         name: isEmail?.name,
         email: isEmail?.email,
         accessToken: token,
         tokenType: "Bearer",
-      },
-      status: 200,
-    });
+      })
+    );
   } catch (error) {
     console.log("Login Service Error", error);
     res.status(500).send(new ApiError(500, "Intrenal Server Error", error));
