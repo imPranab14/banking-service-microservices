@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config()
 import redisClient from "./src/config/redis.js";
 import mongodbConnection from "./src/config/mongodb.js";
+import connectRabbitMQ from "./src/config/rabbimq.js";
 import indexRouter from "./src/router/index.route.js";
 import authRouter from "./src/router/auth.route.js";
 import bodyParser from "body-parser";
@@ -19,7 +20,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(verifyGatewayToken)
 //MongoDb Connection Function
 mongodbConnection()
-
+connectRabbitMQ()
 //Import Router
 app.use('/',indexRouter)
 app.use('/',authRouter)
