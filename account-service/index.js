@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import accountRouter from "./src/router/accont.route.js";
 import verifyGatewayToken from "./src/middleware/verifyGatewayToken.js";
+import connectRabbitMQ from "./src/config/rabbitmq.js";
 
 const app = express();
 // Increase body size limits
@@ -16,6 +17,8 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 //MongoDb Connection Function
 mongodbConnection()
+//rabbit mq connection
+connectRabbitMQ()
 //Verify Internal Gateway Token
 app.use(verifyGatewayToken)
 
