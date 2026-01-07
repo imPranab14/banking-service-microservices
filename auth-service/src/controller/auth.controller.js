@@ -7,6 +7,8 @@ import cookieParser from "cookie-parser";
 import { LoginSchema, RegisterSchema } from "../schema/auth.schema.js";
 import { ApiError } from "../util/ApiError.js";
 import { ApiResponse } from "../util/ApiResponse.js";
+//import channel from "../config/rabbimq.js"
+import connectRabbitMQ from "../config/rabbimq.js";
 
 //Register Handeler
 async function handelUserRegister(req, res) {
@@ -26,7 +28,29 @@ async function handelUserRegister(req, res) {
       email,
       password: hashPassword,
     });
-  
+    //rabbitmq
+    const channel = await connectRabbitMQ();
+    //queue name
+    const queueName = "register_queue";
+    const createQueue = await channel.assertQueue(queueName, {
+      durable: true,
+    });
+    console.log("Register Queue Info", createQueue);
+
+    //send to raddit mq
+    await channel.sendToQueue(
+      queueName,
+      Buffer.from(
+        JSON.stringify({
+          name,
+          email,
+        })
+      ),
+      {
+        persistent: true,
+      }
+    );
+
     //register api response
     res.status(201).json(
       new ApiResponse(201, "new user create successfully", {
