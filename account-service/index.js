@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import accountRouter from "./src/router/accont.route.js";
 import verifyGatewayToken from "./src/middleware/verifyGatewayToken.js";
 import connectRabbitMQ from "./src/config/rabbitmq.js";
+import registerConsumer from "./src/utils/registerConsumer.js";
 
 const app = express();
 // Increase body size limits
@@ -21,6 +22,9 @@ mongodbConnection()
 connectRabbitMQ()
 //Verify Internal Gateway Token
 app.use(verifyGatewayToken)
+
+//Register consumer
+registerConsumer()
 
 //Import Router
 app.use('/',indexRouter)
