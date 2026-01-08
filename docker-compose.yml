@@ -12,6 +12,16 @@ services:
       - "1435:1433"  # Local PC port 1435 -> Container port 1433
     volumes:
       - sqlserverdata:/var/opt/mssql
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
 
   # mongodb:
   #   image: mongodb/mongodb-community-server:8.0-ubi8
@@ -35,6 +45,6 @@ services:
 
 
 volumes:
-  #redis_data:
+  rabbitmq_data:
   sqlserverdata:
  # mongo_data:
