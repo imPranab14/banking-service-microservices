@@ -17,11 +17,12 @@ async function verifyToken(req, res, next) {
   if (!token) {
     return res
       .status(403)
-      .send({ success: "false", message: "invalid authorization header" });
+      .send({ success: "false", message: "Authorization token is missing" });
   }
   try {
     //Verify Token
     const decode = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Decode Token',decode);
 
     //Check token in redis
     const redisToken = await redisClient.get(`token-${decode.emailId}`);

@@ -15,13 +15,14 @@ const port = process.env.PORT || 3000;
 
 // Core middlewares
 app.use(helmet());
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(limiter);
-app.use(verifyToken)
-
+app.use(verifyToken);
 
 //Request logging
 app.use((req, res, next) => {
@@ -34,10 +35,9 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-
-
 //Proxy Middleware
-app.use('/api/v1/auth',
+app.use(
+  "/api/v1/auth",
   commonProxyServerFn(
     "auth service",
     process.env.AUTH_SERVICE_URL || "http://localhost:3001",
@@ -45,7 +45,8 @@ app.use('/api/v1/auth',
   )
 );
 
-app.use('/api/v1/accounts',
+app.use(
+  "/api/v1/accounts",
   commonProxyServerFn(
     "accounts service",
     process.env.ACCOUNTS_SERVICE_URL || "http://localhost:3002",
@@ -53,13 +54,13 @@ app.use('/api/v1/accounts',
   )
 );
 app.use(
-  commonProxyServerFn('/api/v1/transaction',
-    "Transaction Service",
+  "/api/v1/transaction",
+  commonProxyServerFn(
+    "transaction service",
     process.env.TRANSACTION_SERVICE_URL || "http://localhost:3003",
     "^/api/v1/transaction"
   )
 );
-
 
 // //404 handler
 // app.use((req, res, next) => {
