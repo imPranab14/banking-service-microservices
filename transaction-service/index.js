@@ -9,6 +9,7 @@ import verifyGatewayToken from "./src/middleware/verifyGatewayToken.js";
 import connectRabbitMQ from "./src/config/rabbitmq.js";
 import redisConnect from "./src/config/redis.js";
 import logger from "./src/config/logger.js";
+import transactionRouter from "./src/router/transaction.route.js";
 
 const app = express();
 // Increase body size limits
@@ -26,9 +27,11 @@ redisConnect()
 app.use(verifyGatewayToken)
 
 
-//Import Router
+//Import All Router
+//Index Router
 app.use('/',indexRouter)
-//app.use('/',accountRouter)
+//Transaction Router
+app.use('/',transactionRouter)
 
 app.get('/test',(req,res)=>{
   res.send({
