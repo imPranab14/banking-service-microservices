@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 
 //RabbitMQ connection
-//connectRabbitMQ()
+connectRabbitMQ()
 
 //Redis Connection
 redisConnect()
