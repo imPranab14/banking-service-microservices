@@ -56,7 +56,7 @@ async function handelCreateNewAccount(req, res) {
 
 //list of bank account
 async function handelListOfAccount(req, res) {
-   //get user form req header
+  //get user form req header
   const userEmail = req.headers["x-user-email"];
   //check account exits or not
   try {
@@ -178,9 +178,37 @@ async function handelTransaction(req, res) {
     });
   }
 }
+
+//Account validation check
+async function handelAccountNumberCheck(req, res) {
+  const { accountNumber } = req?.query;
+
+  try {
+    //Check DB
+    const checkAccountNumber = await account.findOne({
+      accountNumber: accountNumber,
+    });
+    //if account not exist
+    if (!checkAccountNumber) {
+      return res.status(400).send({
+        message: "account not found",
+      });
+    }
+    res.status(200).send({
+      status:checkAccountNumber?.accountStatus,
+      email:checkAccountNumber?.email
+    })
+  } catch (error) {
+    console.log("Account number find error", error);
+    res.status(500).send({
+      message: "Failed find account number ",
+    });
+  }
+}
 export {
   handelCreateNewAccount,
   handelListOfAccount,
   handelDeleteBankAccount,
   handelTransaction,
+  handelAccountNumberCheck,
 };

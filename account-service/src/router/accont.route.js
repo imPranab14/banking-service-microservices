@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  handelAccountNumberCheck,
   handelCreateNewAccount,
   handelDeleteBankAccount,
   handelListOfAccount,
@@ -12,6 +13,9 @@ const accountRouter = Router();
 accountRouter.post("/account",handelCreateNewAccount);
 accountRouter.get("/list",handelListOfAccount);
 accountRouter.delete("/deleteAccount",handelDeleteBankAccount);
+
+//Check Valid Account 
+accountRouter.get('/validation',handelAccountNumberCheck)
 
 //intrenal transaction 
 accountRouter.post('/internal/transaction',handelTransaction)
