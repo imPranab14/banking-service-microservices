@@ -2,9 +2,9 @@ import mssql from "mssql";
 import logger from "./logger.js";
 
 const sqlConfig = {
-  user: "sa",
-  password: "admin@123",
-  database: process.env.DB_NAME || "master",
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME ,
   server: "localhost",
   port: 1435, // SQL Server port
   pool: {
@@ -20,7 +20,7 @@ const sqlConfig = {
 async function connectMSSQL() {
   try {
     const pool = await mssql.connect(sqlConfig);
-    logger.info(`MSSQL Connected !, ${pool?.connected}`);
+    logger.info(`MSSQL Connected [${process.env.DB_NAME}] ${pool?.connected} !`);
     return pool;
   } catch (error) {
     console.log("Failed to connected mssql".error);
