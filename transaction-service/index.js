@@ -14,6 +14,7 @@ import connectMSSQL from "./src/config/mssql.js";
 import startFailedConsumer from "./src/event/failed.consumer.event.js";
 import { startCreditSuccess } from "./src/event/creditsuccess.consumer.js";
 import startCompensateConsumer from "./src/event/compensate.consumer.js";
+import { startReimbursement } from "./src/event/reimbursement.cousumer.js";
 
 const app = express();
 // Increase body size limits
@@ -37,6 +38,7 @@ connectMSSQL()
 startFailedConsumer()
 startCreditSuccess()
 startCompensateConsumer()
+startReimbursement()
 
 //Import All Router
 //Index Router

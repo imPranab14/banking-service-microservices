@@ -23,6 +23,10 @@ async function connectRabbitMQ() {
     channel.assertQueue("transfer-credit-failed-queue", {
       durable: true,
     });
+    //Create A Queue (transfer-compensated-queue)
+    channel.assertQueue("transfer-compensated-queue", {
+      durable: true,
+    });
     //Bind Queue with exchange
     channel.bindQueue(
       "transfer-debit-failed-queue", //Queue Name
@@ -38,6 +42,11 @@ async function connectRabbitMQ() {
       "transfer-credit-failed-queue", //Queue Name
       "banking-exchange", //Exchange Name
       "account-credit-failed" //Routing Key Name
+    );
+    channel.bindQueue(
+      "transfer-compensated-queue", //Queue Name
+      "banking-exchange", //Exchange Name
+      "transfer-reimbursement" //Routing Key Name
     );
     return channel;
   } catch (error) {

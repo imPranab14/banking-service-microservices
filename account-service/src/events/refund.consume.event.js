@@ -11,7 +11,7 @@ export async function startRefundConsume() {
         //Refund Amount
         await refundAccount(event.fromAccountID,event.amount)
         //Publish Transfer Compensated Event
-        await publishEvent('transfer-compensated',{
+        await publishEvent('transfer-reimbursement',{
              transferId: event.transferId
         })
     })

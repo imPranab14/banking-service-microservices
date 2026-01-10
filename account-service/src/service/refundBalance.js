@@ -1,10 +1,12 @@
 import account from "../model/account.model.js";
 
 async function refundAccount(fromAccount, amount) {
+    console.log("Refund_account",fromAccount,amount);
   //Fetch Account Details
   const fetchAccountDetails = await account.findOne({
     accountNumber: fromAccount,
   });
+  console.log("fetchAccountDetails",fetchAccountDetails);
   //If Account Number Not Found
   if (!fetchAccountDetails) {
     throw new Error("ACCOUNT_NUMBER_FOUND");
