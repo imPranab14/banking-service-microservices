@@ -11,6 +11,7 @@ import redisConnect from "./src/config/redis.js";
 import logger from "./src/config/logger.js";
 import transactionRouter from "./src/router/transaction.route.js";
 import connectMSSQL from "./src/config/mssql.js";
+import startFailedConsumer from "./src/event/failed.consumer.event.js";
 
 const app = express();
 // Increase body size limits
@@ -29,6 +30,9 @@ app.use(verifyGatewayToken)
 
 //MSSQL Connected
 connectMSSQL()
+
+//RabbitMQ Consumer
+startFailedConsumer()
 
 
 //Import All Router
