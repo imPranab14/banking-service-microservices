@@ -9,6 +9,7 @@ async function startCompensateConsumer() {
 
     //Publish Event
     await publishEvent('transfer-compensate',event)
+    channel.ack(msg)
   });
 }
 export default startCompensateConsumer;

@@ -11,7 +11,7 @@ async function startCreditConsume() {
 
     try {
       //Credit Account Function
-      await creditAccount(event?.eventId, event.toAccountId, "adasd");
+      await creditAccount(event?.eventId, event.toAccountId, event.amount);
 
       //Account Credit Succuss Publish Event
       await publishEvent("account-credit-success", event);

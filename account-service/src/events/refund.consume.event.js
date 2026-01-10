@@ -14,7 +14,8 @@ export async function startRefundConsume() {
         await publishEvent('transfer-reimbursement',{
              transferId: event.transferId
         })
+        channel.ack(msg)
     })
-
+    
     
 }

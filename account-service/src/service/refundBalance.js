@@ -6,7 +6,6 @@ async function refundAccount(fromAccount, amount) {
   const fetchAccountDetails = await account.findOne({
     accountNumber: fromAccount,
   });
-  console.log("fetchAccountDetails",fetchAccountDetails);
   //If Account Number Not Found
   if (!fetchAccountDetails) {
     throw new Error("ACCOUNT_NUMBER_FOUND");
