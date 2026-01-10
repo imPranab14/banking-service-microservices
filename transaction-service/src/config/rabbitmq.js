@@ -19,16 +19,25 @@ async function connectRabbitMQ() {
     channel.assertQueue("transfer-credit-success-queue", {
       durable: true,
     });
+    //Create A Queue (transfer-credit-failed-queue)
+    channel.assertQueue("transfer-credit-failed-queue", {
+      durable: true,
+    });
     //Bind Queue with exchange
     channel.bindQueue(
-      "transfer-debit-failed-queue",//Queue Name
-      "banking-exchange",//Exchange Name
-      "account.debit.failed"//Routing Key Name
+      "transfer-debit-failed-queue", //Queue Name
+      "banking-exchange", //Exchange Name
+      "account.debit.failed" //Routing Key Name
     );
-      channel.bindQueue(
-      "transfer-credit-success-queue",//Queue Name
-      "banking-exchange",//Exchange Name
-      "account-credit-success"//Routing Key Name
+    channel.bindQueue(
+      "transfer-credit-success-queue", //Queue Name
+      "banking-exchange", //Exchange Name
+      "account-credit-success" //Routing Key Name
+    );
+    channel.bindQueue(
+      "transfer-credit-failed-queue", //Queue Name
+      "banking-exchange", //Exchange Name
+      "account-credit-failed" //Routing Key Name
     );
     return channel;
   } catch (error) {

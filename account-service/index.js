@@ -12,6 +12,7 @@ import connectRabbitMQ from "./src/config/rabbitmq.js";
 //Consumer Event
 import startDebitConsume from "./src/events/debit.consume.event.js";
 import startCreditConsume from "./src/events/credit.consume.event.js";
+import { startRefundConsume } from "./src/events/refund.consume.event.js";
 
 
 const app = express();
@@ -30,6 +31,7 @@ app.use(verifyGatewayToken)
 //RabbitMQ Consumer Event 
 startDebitConsume()
 startCreditConsume()
+startRefundConsume()
 
 //Import Router
 app.use('/',indexRouter)

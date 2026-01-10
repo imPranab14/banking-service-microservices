@@ -16,10 +16,14 @@ async function connectRabbitMQ() {
     });
 
     //create credit a queue
-     await channel.assertQueue("account-credit-queue", {
+    await channel.assertQueue("account-credit-queue", {
       durable: true,
     });
 
+    //crate refund queue
+    await channel.assertQueue("account-refund-queue", {
+      durable: true,
+    });
 
     //exchange bind with queue
     await channel.bindQueue(
@@ -28,11 +32,17 @@ async function connectRabbitMQ() {
       "transfer.initiated" //routing key name
     );
 
-     //exchange bind with queue
+    //exchange bind with queue
     await channel.bindQueue(
       "account-credit-queue", //queue name
       "banking-exchange", //exchange name
       "account.debit.success" //routing key name
+    );
+    //exchange bind with queue
+    await channel.bindQueue(
+      "account-refund-queue", //queue name
+      "banking-exchange", //exchange name
+      "transfer-compensate" //routing key name
     );
     console.log("Account Service RabbitMQ Connected !");
     return channel;

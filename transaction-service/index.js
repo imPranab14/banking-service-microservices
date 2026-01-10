@@ -13,6 +13,7 @@ import transactionRouter from "./src/router/transaction.route.js";
 import connectMSSQL from "./src/config/mssql.js";
 import startFailedConsumer from "./src/event/failed.consumer.event.js";
 import { startCreditSuccess } from "./src/event/creditsuccess.consumer.js";
+import startCompensateConsumer from "./src/event/compensate.consumer.js";
 
 const app = express();
 // Increase body size limits
@@ -35,6 +36,7 @@ connectMSSQL()
 //RabbitMQ Consumer
 startFailedConsumer()
 startCreditSuccess()
+startCompensateConsumer()
 
 //Import All Router
 //Index Router

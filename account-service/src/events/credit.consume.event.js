@@ -1,7 +1,7 @@
 import connectRabbitMQ from "../config/rabbitmq.js";
 import creditAccount from "../service/creditAccount.js";
 import publishEvent from "./publish.event.js";
-
+import { v4 as uuidv4 } from "uuid";
 async function startCreditConsume() {
   const channel = await connectRabbitMQ();
 
@@ -11,7 +11,7 @@ async function startCreditConsume() {
 
     try {
       //Credit Account Function
-      await creditAccount(event?.eventId, event.toAccountId, event.amount);
+      await creditAccount(event?.eventId, event.toAccountId, "adasd");
 
       //Account Credit Succuss Publish Event
       await publishEvent("account-credit-success", event);
@@ -21,6 +21,9 @@ async function startCreditConsume() {
       //Account Credit Failed Publish Event
       await publishEvent("account-credit-failed", {
         transferId: event.transferId,
+        fromAccountID:event.fromAccountId,
+        amount:event.amount,
+        eventId:uuidv4(),
         reason: error?.message,
       });
       channel.ack(msg);
