@@ -94,7 +94,9 @@ async function handelTransfer(req, res) {
     const queueResponse = channel.publish(
       "banking-exchange",
       "transfer.initiated", //routing key
-      Buffer.from(JSON.stringify(Payload)),
+      Buffer.from(JSON.stringify({
+        eventId:uuidv4(),
+        ...Payload})),
       {
         persistent: true, // survives broker restart
         contentType: "application/json",
@@ -102,8 +104,9 @@ async function handelTransfer(req, res) {
     );
 
     //Api Response
-    res.status(200).send({
+    res.status(202).send({
       success: true,
+       message: "Payment initiated successfully",
       rabbitMQ_Response:queueResponse,
       transferId:Payload?.transferId,
       status: "PENDING",
