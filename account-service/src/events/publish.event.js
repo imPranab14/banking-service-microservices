@@ -8,6 +8,6 @@ async function publishEvent(type, payload) {
     type,
     Buffer.from(JSON.stringify(payload))
   );
-  console.log("Publish_Event_Info",[type],publishInfo);
+  console.log("Publish_Event_Info",[type],publishInfo,payload);
 }
 export default publishEvent;

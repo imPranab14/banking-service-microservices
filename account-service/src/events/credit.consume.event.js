@@ -14,9 +14,7 @@ async function startCreditConsume() {
       await creditAccount(event?.eventId, event.toAccountId, event.amount);
 
       //Account Credit Succuss Publish Event
-      await publishEvent("account-credit-success", {
-        event,
-      });
+      await publishEvent("account-credit-success", event);
       channel.ack(msg);
     } catch (error) {
       console.log(error);
