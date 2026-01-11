@@ -1,11 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "../features/auth/Login";
+import { LoginPage } from "../features/auth/page/login-page";
+
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LoginPage />} />
         <Route
           path="/home"
           element={

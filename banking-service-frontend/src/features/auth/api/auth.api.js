@@ -1,6 +1,7 @@
-import axiosInstance from "./axios.api";
+import axiosInstance from "../../../api/axios.api";
 
-async function loginUser(payload) {
+
+async function loginApi(payload) {
   const { email, password } = payload;
   try {
     const apiResponse = await axiosInstance.post(
@@ -19,4 +20,4 @@ async function loginUser(payload) {
   }
 }
 
-export { loginUser };
+export { loginApi };
