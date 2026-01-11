@@ -5,23 +5,19 @@ import { Input } from "@/components/ui/input";
 import { LoginSchema } from "../../schema/auth.schema";
 
 const Login = () => {
-  const [email, setEmail] = useState("Friedrich47");
+  const [email, setEmail] = useState("Raleigh.Feest86@yahoo.com");
   const [password, setPassword] = useState("123");
-  const [error,setError]=useState("")
+  //const [error,setError]=useState("")
   async function handelLogin(e) {
     e.preventDefault();
     const loginReqData = {
       email,
-      password 
+      password,
     };
-    const data =LoginSchema.safeParse(loginReqData)
-    // if(!data.success){
-    //   return setError("sdfsdfg")
-    // }
-    console.log("loginData",data.error);
-    console.log("error",error);
-    //const loginRes = await loginUser(loginData);
-  
+    const { data } = LoginSchema.safeParse(loginReqData);
+    //Login API Call
+    const response = await loginUser(data);
+    console.log("data", response);
   }
 
   return (

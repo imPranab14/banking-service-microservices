@@ -1,4 +1,3 @@
-import axios from "axios";
 import axiosInstance from "./axios.api";
 
 async function loginUser(payload) {
