@@ -1,3 +1,4 @@
+import connectMSSQL from "../config/mssql.js";
 import connectRabbitMQ from "../config/rabbitmq.js";
 import TransferSchema from "../schema/transfer.schema.js";
 import getaAccountDetails from "../service/accountNumberCheck.js";
@@ -86,7 +87,7 @@ async function handelTransfer(req, res) {
     console.log("Payload", Payload);
     //Save in mssql db
     await insertBankTransfer(Payload);
-    //Publice Rabbit MQ
+    //Publish Rabbit MQ
     const channel = await connectRabbitMQ();
     await channel.assertExchange("banking-exchange", "topic", {
       durable: true,
@@ -94,9 +95,12 @@ async function handelTransfer(req, res) {
     const queueResponse = channel.publish(
       "banking-exchange",
       "transfer.initiated", //routing key
-      Buffer.from(JSON.stringify({
-        eventId:uuidv4(),
-        ...Payload})),
+      Buffer.from(
+        JSON.stringify({
+          eventId: uuidv4(),
+          ...Payload,
+        })
+      ),
       {
         persistent: true, // survives broker restart
         contentType: "application/json",
@@ -106,9 +110,9 @@ async function handelTransfer(req, res) {
     //Api Response
     res.status(202).send({
       success: true,
-       message: "Payment initiated successfully",
-      rabbitMQ_Response:queueResponse,
-      transferId:Payload?.transferId,
+      message: "Payment initiated successfully",
+      rabbitMQ_Response: queueResponse,
+      transferId: Payload?.transferId,
       status: "PENDING",
     });
   } catch (error) {
@@ -118,4 +122,27 @@ async function handelTransfer(req, res) {
     });
   }
 }
-export { handelTransfer };
+
+async function handelTransaction(req, res) {
+  const { transactionId } = req?.params;
+  try {
+    //Find Transaction ID in mssql db
+    const pool = await connectMSSQL();
+   //MSSQL Query
+    const data = await pool.query(
+      `SELECT *FROM [${process.env.DB_NAME}].[dbo].[BankTransfers] where TransferId='${transactionId}'`
+    );
+    //Api Response
+    res.status(200).send({
+      message: "Transaction information",
+      data: data?.recordsets[0],
+    });
+  } catch (error) {
+    console.log("Failed to fetch transaction id form db", error);
+    res.status(500).send({
+      message: "Failed to fetch transaction",
+      error: error,
+    });
+  }
+}
+export { handelTransfer, handelTransaction };
