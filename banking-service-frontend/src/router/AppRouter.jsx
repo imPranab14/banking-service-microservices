@@ -1,8 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LoginPage } from "../features/auth/page/login-page";
-
+import { useAuthStore } from "../features/auth/store/useAuthStore";
 
 const AppRouter = () => {
+  const { authUser } = useAuthStore();
   return (
     <BrowserRouter>
       <Routes>
@@ -10,11 +11,16 @@ const AppRouter = () => {
         <Route
           path="/home"
           element={
-            <>
-              <h1>this is home page</h1>
-            </>
+            authUser ? (
+              <>
+                <h1>this is home page</h1>
+              </>
+            ) : (
+              <LoginPage />
+            )
           }
         />
+        <Route path="*" element={<h1>Not Found</h1>}/>
       </Routes>
     </BrowserRouter>
   );

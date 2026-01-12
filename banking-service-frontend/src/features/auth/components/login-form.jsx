@@ -8,13 +8,18 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { loginApi } from "../api/auth.api";
 import { LoginSchema } from "../schema/auth.schema";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
 
 const LoginFrom = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("Raleigh.Feest86@yahoo.com");
   const [password, setPassword] = useState("123");
-  //const [error,setError]=useState("")
+
+  //Zustand Store Call
+  const { authUser, fetchLogin } = useAuthStore();
+  //Handel Login From
   async function handelLogin(e) {
     e.preventDefault();
     const loginReqData = {
@@ -24,8 +29,11 @@ const LoginFrom = () => {
     //Zod Schema Validation
     const { data } = LoginSchema.safeParse(loginReqData);
     //Login API Call
-    const response = await loginApi(data);
-    console.log("data", response);
+    await fetchLogin(data);
+    //Navigate to home page if authorized user
+    if (authUser) {
+      navigate("/home");
+    }
   }
 
   return (
