@@ -31,6 +31,7 @@ const LoginFrom = () => {
     //Login API Call
     await fetchLogin(data);
     //Navigate to home page if authorized user
+    console.log("auth",authUser);
     if (authUser) {
       navigate("/home");
     }

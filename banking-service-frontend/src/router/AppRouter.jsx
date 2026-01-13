@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LoginPage } from "../features/auth/page/login-page";
 import { useAuthStore } from "../features/auth/store/useAuthStore";
+import HomePage from "../features/home/page/HomePage";
 
 const AppRouter = () => {
   const { authUser } = useAuthStore();
@@ -12,9 +13,7 @@ const AppRouter = () => {
           path="/home"
           element={
             authUser ? (
-              <>
-                <h1>this is home page</h1>
-              </>
+              <HomePage/>
             ) : (
               <LoginPage />
             )
