@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import redisClient from "../config/redis.js";
 
 async function verifyToken(req, res, next) {
-  //public end ponit
+  //public end point
   const publicRoutes = [
     "/health",
     "/api/v1/auth/login",
@@ -11,9 +11,8 @@ async function verifyToken(req, res, next) {
   if (publicRoutes.includes(req.path)) {
     return next();
   }
-
-  //Get Token from url header
-  const token = req.headers.authorization?.split(" ")[1];
+  //Get Token Cookies
+  const token = req.cookies.token //req.headers.authorization?.split(" ")[1];
   if (!token) {
     return res
       .status(403)
@@ -22,7 +21,7 @@ async function verifyToken(req, res, next) {
   try {
     //Verify Token
     const decode = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Decode Token',decode);
+    ;
 
     //Check token in redis
     const redisToken = await redisClient.get(`token-${decode.emailId}`);
@@ -34,7 +33,7 @@ async function verifyToken(req, res, next) {
         message: "Token is revoked or expired",
       });
     }
-    //Attach data to request header
+    //Attach data to request header console.log('Decode Token',decode)
     req.headers["x-user-email"] = decode.emailId;
     
     next();

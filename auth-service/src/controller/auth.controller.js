@@ -10,7 +10,7 @@ import { ApiResponse } from "../util/ApiResponse.js";
 //import channel from "../config/rabbimq.js"
 import connectRabbitMQ from "../config/rabbimq.js";
 
-//Register Handeler
+//Register Handle
 async function handelUserRegister(req, res) {
   //Zod Validation
   const data = RegisterSchema.safeParse(req?.body);
@@ -64,7 +64,7 @@ async function handelUserRegister(req, res) {
   }
 }
 
-//Login Handeler
+//Login Handle
 async function handelLoginUser(req, res) {
   //Zod Validation
   const data = LoginSchema.safeParse(req.body);
@@ -90,11 +90,11 @@ async function handelLoginUser(req, res) {
     const comparePassword = await bcrypt.compare(password, isEmail.password);
     //Valid password or not
     if (!comparePassword)
-      res.status(400).json(new ApiResponse(400, "Password not vaild"));
+      res.status(400).json(new ApiResponse(400, "Password Not Valid"));
 
     //Generated Token
     const token = await generatedToken(email);
-    //Redis Token Expiers in 1hour
+    //Redis Token EXpire in 1hour
     const tokenSaveRedis = await redisClient.setEx(
       `token-${email}`,
       60 * 60,
@@ -112,7 +112,7 @@ async function handelLoginUser(req, res) {
     res.cookie("token", token, {
       maxAge: 60 * 60 * 1000, // 1 hour
       httpOnly: true,
-      secure: true, // use true in production (HTTPS)
+      secure: false, // use true in production (HTTPS)
     });
 
     //Login successfully json response
@@ -126,11 +126,11 @@ async function handelLoginUser(req, res) {
     );
   } catch (error) {
     console.log("Login Service Error", error);
-    res.status(500).send(new ApiError(500, "Intrenal Server Error", error));
+    res.status(500).send(new ApiError(500, "Internal Server Error", error));
   }
 }
 
-//Logout Handeler
+//Logout Logout
 async function handelLogout(req, res) {
   //Delete form redis
   //After successfully delete redis return 1

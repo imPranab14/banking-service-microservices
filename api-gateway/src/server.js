@@ -7,11 +7,15 @@ import logger from "./config/logger.js";
 import limiter from "./middleware/rate-limit.middleware.js";
 import commonProxyServerFn from "./middleware/proxy.middleware.js";
 import verifyToken from "./middleware/verifyToken.middleware.js";
+import cookieParser from "cookie-parser";
 //import apiProxy from "./config/services.js";
 
 //Express server
 const app = express();
 const port = process.env.PORT || 3000;
+
+//Use Cookie Parser For Cookies Token
+app.use(cookieParser())
 
 // Core middlewares
 app.use(helmet());
