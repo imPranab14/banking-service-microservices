@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 function verifyGatewayToken(req, res, next) {
-  console.log("Gateway Token",req.headers);
+ console.log("Gateway Token",req.headers); 
   const token = req.headers["jwt-internal-token"];
   if (!token) {
     return res

@@ -1,5 +1,7 @@
 import axiosInstance from "../../../api/axios.api";
 
+
+//Account List
 async function listOfAccount() {
   try {
     const response = await axiosInstance.get(
@@ -9,7 +11,7 @@ async function listOfAccount() {
       }
     );
     console.log("response", response);
-    return response;
+    return response.data;
   } catch (error) {
     console.log("list of account api", error);
   }

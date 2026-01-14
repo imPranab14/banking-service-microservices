@@ -1,15 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { listOfAccount } from "../api/home.page.api";
 
 function HomePage() {
+  const [accountList, setAccountList] = useState();
+
+  //List Account API CALL
   async function userListOfAccount() {
     const response = await listOfAccount();
-    console.log("response", response);
+    setAccountList(response?.data);
   }
 
   useEffect(() => {
     userListOfAccount();
   }, []);
+
+  console.log("accountList", accountList);
   const data = [
     {
       _id: "6960d6c42d35f97a2014a29d",
@@ -29,7 +34,7 @@ function HomePage() {
         </h1>
 
         <div className="grid gap-6 md:grid-cols-2">
-          {data?.map((account) => (
+          {accountList?.map((account) => (
             <div
               key={account._id}
               className="bg-white rounded-xl shadow-md p-6 border border-gray-200"

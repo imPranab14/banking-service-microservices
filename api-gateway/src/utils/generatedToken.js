@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 function internalToken(tergetService) {
   const jwtToken = jwt.sign(
-    //JWT Paylode
+    //JWT Payload
     {
       issuer: process.env.INTERNAL_JWT_ISSUER,
       sub: "gateway",
