@@ -35,11 +35,11 @@ function HomePage() {
                 className="bg-white rounded-xl shadow-md p-6 border border-gray-200"
               >
                 <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold text-gray-700">
-                    {account.accountType.toUpperCase()} Account
+                  <h2 className="text-lg font-semibold text-gray-700 capitalize">
+                    {account.accountType} Account
                   </h2>
                   <span
-                    className={`px-3 py-1 text-sm rounded-full font-medium ${
+                    className={`px-3 py-1 text-sm rounded-full font-medium capitalize ${
                       account.accountStatus === "active"
                         ? "bg-green-100 text-green-700"
                         : "bg-red-100 text-red-700"
