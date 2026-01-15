@@ -32,9 +32,9 @@ const LoginFrom = () => {
     await fetchLogin(data);
     //Navigate to home page if authorized user
     console.log("auth",authUser);
-    if (authUser) {
-      navigate("/home");
-    }
+    // if (authUser) {
+    //   navigate("/home");
+    // }
   }
 
   return (
