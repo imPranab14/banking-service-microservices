@@ -8,6 +8,8 @@ import limiter from "./middleware/rate-limit.middleware.js";
 import commonProxyServerFn from "./middleware/proxy.middleware.js";
 import verifyToken from "./middleware/verifyToken.middleware.js";
 import cookieParser from "cookie-parser";
+import { register } from "prom-client";
+import client from "./utils/metrics.js";
 //import apiProxy from "./config/services.js";
 
 //Express server
@@ -77,6 +79,13 @@ app.use(
 //   logger.error(`error `, error);
 //   res.status(500).json({ message: "internal server error" });
 // });
+
+
+app.get("/metrics", async (req, res) => {
+   res.set("Content-Type", client.register.contentType);
+  res.end(await client.register.metrics());
+});
+
 
 function startServer() {
   try {

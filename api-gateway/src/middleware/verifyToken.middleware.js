@@ -5,6 +5,7 @@ async function verifyToken(req, res, next) {
   //public end point
   const publicRoutes = [
     "/health",
+    "/metrics",
     "/api/v1/auth/login",
     "/api/v1/auth/register",
   ];
