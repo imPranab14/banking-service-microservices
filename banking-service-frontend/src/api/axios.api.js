@@ -10,7 +10,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     console.log("axios error", error);
     //Write Redirect also
-    alert("Alert Form Axios Interceptors") 
+    //alert("Alert Form Axios Interceptors") 
     return Promise.reject(error)
   }
 );

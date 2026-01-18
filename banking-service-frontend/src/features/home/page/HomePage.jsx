@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { listOfAccount } from "../api/home.page.api";
 import toast, { Toaster } from "react-hot-toast";
+import user from '../dummy/userdata.js'
 
 function HomePage() {
   //State for Account List
   const [accountList, setAccountList] = useState();
+  const [userList,setUserList]=useState(user?.users)
 
   //List Account API CALL
   useEffect(() => {
@@ -19,7 +21,7 @@ function HomePage() {
     })();
   }, []);
 
-  console.log("accountList", accountList);
+  console.log("userList", userList);
   return (
     <>
       <div className="min-h-screen bg-gray-100 p-6">
@@ -78,6 +80,14 @@ function HomePage() {
               </div>
             ))}
           </div>
+
+          {userList.map((ele)=>{
+            return(
+              <>
+              <h1>Name : {ele.firstName} {ele.lastName}</h1>
+              </>
+            )
+          })}
         </div>
       </div>
       <Toaster />
