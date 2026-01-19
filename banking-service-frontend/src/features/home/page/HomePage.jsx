@@ -21,7 +21,7 @@ function HomePage() {
     })();
   }, []);
 
-  console.log("userList", userList);
+  console.log("accountList", accountList);
   return (
     <>
       <div className="min-h-screen bg-gray-100 p-6">
@@ -81,10 +81,10 @@ function HomePage() {
             ))}
           </div>
 
-          {userList.map((ele)=>{
+          {userList.map((ele,id)=>{
             return(
               <>
-              <h1>Name : {ele.firstName} {ele.lastName}</h1>
+              <h1 key={id}>Name : {ele.firstName} {ele.lastName}</h1>
               </>
             )
           })}
