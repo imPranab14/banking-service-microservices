@@ -1,8 +1,11 @@
-import { Trash2, Eye, Wallet, Mail, Hash, DollarSign } from "lucide-react";
+import { Trash2, Eye, Wallet, Mail, Hash, DollarSign, Landmark } from "lucide-react";
 import { useEffect, useState } from "react";
 import { deleteAccount, listOfAccount } from "../api/home.page.api";
 import toast, { Toaster } from "react-hot-toast";
 import user from "../dummy/userdata.js";
+import {Button} from "../../../components/ui/button.jsx"
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../../../components/ui/dialog.jsx";
+import { AddAccountDialog } from "./AddAccountDialog.jsx";
 
 function HomePage() {
   //State for Account List
@@ -44,6 +47,8 @@ function HomePage() {
   console.log("accountList", accountList);
   return (
     <>
+
+     <AddAccountDialog accountType={changeValue}/>
       <div>
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
           <div className="container mx-auto px-4 py-12">
@@ -63,7 +68,8 @@ function HomePage() {
                   <div className="flex justify-between items-start mb-6">
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center shadow-md">
-                        <Wallet className="w-6 h-6 text-white" />
+                        {account.accountType === 'savings'?<Wallet className="w-6 h-6 text-white" />
+                        :<Landmark className="w-6 h-6 text-white"/>}
                       </div>
                       <div>
                         <h2 className="text-xl font-bold text-slate-800 capitalize">
