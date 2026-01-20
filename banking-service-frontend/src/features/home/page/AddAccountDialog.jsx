@@ -17,8 +17,8 @@ export function AddAccountDialog({accountType}) {
   const [account, setAccount] = useState("");
   const handelSubmit = (e) => {
     e.preventDefault();
-    console.log("e", account);
-    accountType
+    //Send To Parent Component
+    accountType(account)
   };
   return (
     <Dialog>

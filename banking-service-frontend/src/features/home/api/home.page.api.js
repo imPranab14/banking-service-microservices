@@ -8,17 +8,31 @@ async function listOfAccount() {
     return response.data;
   } catch (error) {
     console.log("list of account api", error);
+    throw error;
+  }
+}
+
+//Delete Account
+async function deleteAccount(deleteAccountNumber) {
+  try {
+    const response = await axiosInstance.delete(
+      `api/v1/accounts/deleteAccount/?accountNumber=${deleteAccountNumber}`,
+    );
+    return response;
+  } catch (error) {
+    throw error("Delete Account Api Error");
+  }
+}
+
+//Create Account
+async function createAccount(accountType) {
+  try {
+    const response = await axiosInstance.post(`api/v1/accounts/account`, {
+      accountType,
+    });
+    return response;
+  } catch (error) {
     throw error
   }
 }
-
-async function deleteAccount(deleteAccountNumber) {
-  try {
-    const response = await axiosInstance.delete(`api/v1/accounts/deleteAccount/?accountNumber=${deleteAccountNumber}`);
-    return response;
-  } catch (error) {
-    throw error("Delete Account Api Error")
-  }
-}
-
-export { listOfAccount,deleteAccount };
+export { listOfAccount, deleteAccount, createAccount };
