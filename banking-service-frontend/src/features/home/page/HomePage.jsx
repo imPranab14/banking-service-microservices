@@ -65,6 +65,7 @@ function HomePage() {
     fetchAccountList();
   }, []);
 
+  //Create Bank Account Function 
   async function getAccountType(data) {
     console.log("Account Type Parent", data);
     try {
@@ -82,16 +83,19 @@ function HomePage() {
   }
   return (
     <>
-      <AddAccountDialog accountType={getAccountType} />
+     
       <div>
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
           <div className="container mx-auto px-4 py-12">
+          <div className="flex justify-between items-center">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-slate-800 mb-2">
                 My Accounts
               </h1>
               <p className="text-slate-600">Manage your financial accounts</p>
             </div>
+             <AddAccountDialog accountType={getAccountType} />
+             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
               {accountList?.map((account, id) => (

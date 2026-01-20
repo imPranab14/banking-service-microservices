@@ -23,7 +23,7 @@ export function AddAccountDialog({accountType}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Open Dialog</Button>
+        <Button variant="outline">Add Account</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -47,7 +47,7 @@ export function AddAccountDialog({accountType}) {
               </select>
             </div>
           </div>
-          <Button type="submit">Add Account</Button>
+          <Button type="submit" disabled={!account}>Add Account</Button>
         </form>
 
         <DialogFooter>
