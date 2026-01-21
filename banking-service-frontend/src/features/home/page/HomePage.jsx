@@ -27,11 +27,14 @@ import {
   DialogTrigger,
 } from "../../../components/ui/dialog.jsx";
 import { AddAccountDialog } from "./AddAccountDialog.jsx";
+import MoneyTransaction from "./MoneyTransaction.jsx";
 
 function HomePage() {
   //State for Account List
   const [accountList, setAccountList] = useState();
   const [userList, setUserList] = useState(user?.users);
+  const [showMoneyTransaction, setShowMoneyTransaction] = useState(false);
+  const [selectedAccountNumber, setSelectedAccountNumber] = useState(null);
 
   //List Account API CALL
 
@@ -65,7 +68,7 @@ function HomePage() {
     fetchAccountList();
   }, []);
 
-  //Create Bank Account Function 
+  //Create Bank Account Function
   async function getAccountType(data) {
     console.log("Account Type Parent", data);
     try {
@@ -73,7 +76,7 @@ function HomePage() {
       console.log("Create Account Response", response);
       if (response.status === 201) {
         toast.success(`create a new bank ${data} account`);
-        await fetchAccountList()
+        await fetchAccountList();
       }
     } catch (error) {
       if (error.status === 400) {
@@ -81,21 +84,27 @@ function HomePage() {
       }
     }
   }
+
+  //Navigate to Money Transfer Page
+  function navigateToMoneyTransfer(accountNumber) {
+    console.log("account", accountNumber);
+    setShowMoneyTransaction(true);
+    setSelectedAccountNumber(accountNumber);
+  }
   return (
     <>
-     
-      <div>
+      {!showMoneyTransaction ? (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
           <div className="container mx-auto px-4 py-12">
-          <div className="flex justify-between items-center">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-slate-800 mb-2">
-                My Accounts
-              </h1>
-              <p className="text-slate-600">Manage your financial accounts</p>
+            <div className="flex justify-between items-center">
+              <div className="mb-8">
+                <h1 className="text-3xl font-bold text-slate-800 mb-2">
+                  My Accounts
+                </h1>
+                <p className="text-slate-600">Manage your financial accounts</p>
+              </div>
+              <AddAccountDialog accountType={getAccountType} />
             </div>
-             <AddAccountDialog accountType={getAccountType} />
-             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
               {accountList?.map((account, id) => (
@@ -167,7 +176,12 @@ function HomePage() {
                   </div>
 
                   <div className="flex gap-3">
-                    <button className="flex-1 bg-slate-800 hover:bg-slate-900 text-white py-3 px-4 rounded-xl transition-all duration-200 font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                    <button
+                      onClick={(e) =>
+                        navigateToMoneyTransfer(account.accountNumber)
+                      }
+                      className="flex-1 bg-slate-800 hover:bg-slate-900 text-white py-3 px-4 rounded-xl transition-all duration-200 font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                    >
                       <Eye className="w-4 h-4" />
                       View Details
                     </button>
@@ -184,15 +198,17 @@ function HomePage() {
             </div>
           </div>
         </div>
+      ) : (
+        <MoneyTransaction  selectedAccountNumber={selectedAccountNumber} setShowMoneyTransaction={setShowMoneyTransaction}/>
+      )}
 
-        {/* {userList.map((ele,id)=>{
+      {/* {userList.map((ele,id)=>{
             return(
               <>
               <h1 key={id}>Name : {ele.firstName} {ele.lastName}</h1>
               </>
             )
           })} */}
-      </div>
 
       <Toaster />
     </>
