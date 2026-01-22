@@ -13,7 +13,7 @@ async function verifyToken(req, res, next) {
     return next();
   }
   //Get Token Cookies
-  const token = req.cookies.token //req.headers.authorization?.split(" ")[1];
+  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
   if (!token) {
     return res
       .status(403)
