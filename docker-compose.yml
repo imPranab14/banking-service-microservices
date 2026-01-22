@@ -46,9 +46,22 @@ services:
     #build: .
     image: api-gateway
     container_name: api-gateway
+    environment:
+      REDIS_URL: redis://redis:6379
     ports:
       - "3000:3000"
-   
+
+  auth-server:
+    image: auth-service
+    container_name: auth-service
+    environment:
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      MONGO_DB_URL: mongodb://host.docker.internal:27017
+
+
+    ports:
+      - "3001:3001"
 
 
 

@@ -145,4 +145,29 @@ async function handelTransaction(req, res) {
     });
   }
 }
-export { handelTransfer, handelTransaction };
+
+async function handelAllTransaction(req,res) {
+   const {accountNumber}= req.query;
+  
+  try {
+    //Find Transaction ID in mssql db
+    const pool = await connectMSSQL();
+   //MSSQL Query
+    const data = await pool.query(
+      `SELECT *FROM [${process.env.DB_NAME}].[dbo].[BankTransfers] where FromAccountId=${accountNumber}`
+    );
+    //Api Response
+    res.status(200).send({
+      message: "All Transaction History",
+      data: data?.recordsets[0],
+    });
+  } catch (error) {
+    console.log("Failed to fetch transaction id form db", error);
+    res.status(500).send({
+      message: "Failed to fetch transaction",
+      error: error,
+    });
+  }
+  
+}
+export { handelTransfer, handelTransaction,handelAllTransaction };

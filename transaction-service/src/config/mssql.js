@@ -20,7 +20,7 @@ const sqlConfig = {
 async function connectMSSQL() {
   try {
     const pool = await mssql.connect(sqlConfig);
-    logger.info(`MSSQL Connected [${process.env.DB_NAME}] ${pool?.connected} !`);
+    logger.info(`MSSQL Connected [${sqlConfig.server}] [${process.env.DB_NAME}] ${pool?.connected} !`);
     return pool;
   } catch (error) {
     console.log("Failed to connected mssql".error);
