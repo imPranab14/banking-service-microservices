@@ -21,6 +21,8 @@ const app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
+//Pass Cookies
+app.use(cookieParser())
 
 //RabbitMQ connection
 connectRabbitMQ()
@@ -32,7 +34,7 @@ redisConnect()
 app.use(verifyGatewayToken)
 
 //MSSQL Connected
-//connectMSSQL()
+connectMSSQL()
 
 //RabbitMQ Consumer
 startFailedConsumer()

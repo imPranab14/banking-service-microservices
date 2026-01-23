@@ -1,18 +1,18 @@
 import axios from "axios";
 
-async function getaAccountDetails(accountNumber, token) {
+async function getAccountDetails(accountNumber, token) {
   try {
     const response = await axios.get(
       `${process.env.ACCOUNT_SERVICE_URL}validation/?accountNumber=${accountNumber}`,
       {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
     return response?.data;
   } catch (error) {
-    console.log("Faild to fetch valid account api", error);
+    console.log("Failed to fetch valid account api", error);
   }
 }
-export default getaAccountDetails;
+export default getAccountDetails;

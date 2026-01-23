@@ -1,13 +1,12 @@
 import connectMSSQL from "../config/mssql.js";
 import connectRabbitMQ from "../config/rabbitmq.js";
 import TransferSchema from "../schema/transfer.schema.js";
-import getaAccountDetails from "../service/accountNumberCheck.js";
+import getAccountDetails from "../service/accountNumberCheck.js";
 import insertBankTransfer from "../service/insertBankTransfer.js";
 import { ApiError } from "../utils/ApiError.js";
 import { v4 as uuidv4 } from "uuid";
 
 async function handelTransfer(req, res) {
-  console.log("req",req.body);
   const transferPayload = TransferSchema.safeParse(req.body);
   try {
     //Zod Validation
@@ -18,8 +17,8 @@ async function handelTransfer(req, res) {
           new ApiError(
             400,
             "input field missing",
-            transferPayload.error._zod.def
-          )
+            transferPayload.error._zod.def,
+          ),
         );
     }
     const {
@@ -40,54 +39,51 @@ async function handelTransfer(req, res) {
         .send(
           new ApiError(
             400,
-            "From account number and to account number are the same"
-          )
+            "From account number and to account number are the same",
+          ),
         );
     }
     //Check source account number valid or not
-    // const checkFromAccountNumber = await getaAccountDetails(
-    //   userAccountNo,
-    //   req.headers.authorization
-    // );
+    const checkFromAccountNumber = await getAccountDetails(
+      userAccountNo,
+      req.cookies.token
+    );
     //if account number not found
-   
-
-    // if (!checkFromAccountNumber) {
-    //   return res.status(404).send({ message: "user account number not found" });
-    // }
+     if (!checkFromAccountNumber) {
+       return res.status(404).send({ message: "user account number not found" });
+     }
     //source account user verify
-    //     if (
-    //   req?.headers["x-user-email"].toLowerCase() !=
-    //   'francis_stark27@yahoo.com'
-    // ) {
-    //   return res.status(460).send({
-    //     message: "Logged-in user does not match the source account holder.",
-    //     soureEmail: req?.headers["x-user-email"],
-    //     destinationEmail: checkFromAccountNumber?.email,
-    //   });
-    // }
+        if (
+      req?.headers["x-user-email"].toLowerCase() !=
+      checkFromAccountNumber.email
+    ) {
+      return res.status(460).send({
+        message: "Logged-in user does not match the source account holder.",
+        sourceEmail: req?.headers["x-user-email"],
+        destinationEmail: checkFromAccountNumber?.email,
+      });
+    }
 
     //check destination account number valid or not
-    // const checkToAccountNumber = await getaAccountDetails(
-    //   destinationAccountNo,
-    //   req.headers.authorization
-    // );
+    const checkToAccountNumber = await getAccountDetails(
+      destinationAccountNo,
+      req.cookies.token
+    );
     //destination account number check
-    // if (!checkToAccountNumber) {
-    //   return res
-    //     .status(404)
-    //     .send({ message: "destination account number not found" });
-    // }
+    if (!checkToAccountNumber) {
+      return res
+        .status(404)
+        .send({ message: "destination account number not found" });
+    }
     //Payload for rabbit mq
     const Payload = {
       transferId: uuidv4(),
       fromAccountId: userAccountNo,
-      toAccountId: '192026195211206',
+      toAccountId: "192026195211206",
       amount: amount,
       status: "PENDING",
     };
 
-    console.log("Payload", Payload);
     //Save in mssql db
     await insertBankTransfer(Payload);
     //Publish Rabbit MQ
@@ -102,12 +98,12 @@ async function handelTransfer(req, res) {
         JSON.stringify({
           eventId: uuidv4(),
           ...Payload,
-        })
+        }),
       ),
       {
         persistent: true, // survives broker restart
         contentType: "application/json",
-      }
+      },
     );
 
     //Api Response
@@ -131,9 +127,9 @@ async function handelTransaction(req, res) {
   try {
     //Find Transaction ID in mssql db
     const pool = await connectMSSQL();
-   //MSSQL Query
+    //MSSQL Query
     const data = await pool.query(
-      `SELECT *FROM [${process.env.DB_NAME}].[dbo].[BankTransfers] where TransferId='${transactionId}'`
+      `SELECT *FROM [${process.env.DB_NAME}].[dbo].[BankTransfers] where TransferId='${transactionId}'`,
     );
     //Api Response
     res.status(200).send({
@@ -149,15 +145,15 @@ async function handelTransaction(req, res) {
   }
 }
 
-async function handelAllTransaction(req,res) {
-   const {accountNumber}= req.query;
-  
+async function handelAllTransaction(req, res) {
+  const { accountNumber } = req.query;
+
   try {
     //Find Transaction ID in mssql db
     const pool = await connectMSSQL();
-   //MSSQL Query
+    //MSSQL Query
     const data = await pool.query(
-      `SELECT *FROM [${process.env.DB_NAME}].[dbo].[BankTransfers] where FromAccountId=${accountNumber}`
+      `SELECT *FROM [${process.env.DB_NAME}].[dbo].[BankTransfers] where FromAccountId=${accountNumber}`,
     );
     //Api Response
     res.status(200).send({
@@ -171,6 +167,5 @@ async function handelAllTransaction(req,res) {
       error: error,
     });
   }
-  
 }
-export { handelTransfer, handelTransaction,handelAllTransaction };
+export { handelTransfer, handelTransaction, handelAllTransaction };

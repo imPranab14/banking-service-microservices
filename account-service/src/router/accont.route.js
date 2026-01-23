@@ -17,7 +17,7 @@ accountRouter.delete("/deleteAccount",handelDeleteBankAccount);
 //Check Valid Account 
 accountRouter.get('/validation',handelAccountNumberCheck)
 
-//intrenal transaction 
+//Internal transaction 
 accountRouter.post('/internal/transaction',handelTransaction)
 
 export default accountRouter;
