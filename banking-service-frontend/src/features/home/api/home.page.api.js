@@ -51,15 +51,18 @@ async function listOfTransaction(accountNumber) {
 
 //Money Transfer
 async function moneyTransfer(data) {
-  console.log("data", data);
   try {
-    const response = await axiosInstance.post(`api/v1/transaction/transfer`, {
-      fromAccountNo: 192026193835003,
-      toAccountNo: 192026195211206,
-      amount: 10,
+    const response = await axiosInstance.post(
+      `api/v1/transaction/transfer`,
+      data,
+    );
+    return new Promise(function (resolve) {
+      setTimeout(() => {
+        resolve(response);
+      }, 5 * 1000);
     });
-    console.log("res", response);
-    return response;
+
+   // return response;
   } catch (error) {
     console.log("Money transfer api error", error);
     throw error;

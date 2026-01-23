@@ -13,6 +13,7 @@ import {
   Send,
 } from "lucide-react";
 import { moneyTransfer } from "../api/home.page.api";
+import { Button } from "../../../components/ui/Button";
 
 function MoneyTransaction({
   selectedAccountNumber,
@@ -22,6 +23,7 @@ function MoneyTransaction({
   const [allTransaction, setAllTransaction] = useState(
     accountAllTransaction || [],
   );
+  const [submitDisabled, setSubmitDisabled] = useState(false);
 
   //Zod Schema
   const MoneyTransferSchema = z.object({
@@ -33,7 +35,6 @@ function MoneyTransaction({
   //Handle Money Transfer
   async function handelMoneyTransfer(e) {
     e.preventDefault();
-    console.log("selectedAccountNumber", typeof e.target.amount.value);
     const moneyTransferData = {
       fromAccountNo: Number(selectedAccountNumber),
       toAccountNo: Number(e.target.toAccountNumber.value),
@@ -45,6 +46,7 @@ function MoneyTransaction({
     }
     //Money Transfer API CALL
     try {
+      setSubmitDisabled(true);
       const response = await moneyTransfer(moneyTransferData);
       if (response.status === 202) {
         toast.success("Money transferred successfully");
@@ -52,6 +54,8 @@ function MoneyTransaction({
     } catch (error) {
       console.log(error);
       toast.error("Money transfer failed");
+    } finally {
+      setSubmitDisabled(false);
     }
   }
   return (
@@ -135,7 +139,13 @@ function MoneyTransaction({
                     />
                   </div>
 
-                  <input type="submit" className="px-5 rounded-lg py-2 bg-blue-700 mt-3 text-white" />
+                  <Button
+                    type="submit"
+                    className="mt-4"
+                    disabled={submitDisabled}
+                  >
+                    Submit
+                  </Button>
                 </form>
               </div>
             </div>
