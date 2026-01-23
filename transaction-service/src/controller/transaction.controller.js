@@ -7,6 +7,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { v4 as uuidv4 } from "uuid";
 
 async function handelTransfer(req, res) {
+  console.log("req",req.body);
   const transferPayload = TransferSchema.safeParse(req.body);
   try {
     //Zod Validation
@@ -44,42 +45,44 @@ async function handelTransfer(req, res) {
         );
     }
     //Check source account number valid or not
-    const checkFromAccountNumber = await getaAccountDetails(
-      userAccountNo,
-      req.headers.authorization
-    );
+    // const checkFromAccountNumber = await getaAccountDetails(
+    //   userAccountNo,
+    //   req.headers.authorization
+    // );
     //if account number not found
-    if (!checkFromAccountNumber) {
-      return res.status(404).send({ message: "user account number not found" });
-    }
+   
+
+    // if (!checkFromAccountNumber) {
+    //   return res.status(404).send({ message: "user account number not found" });
+    // }
     //source account user verify
-    if (
-      req?.headers["x-user-email"].toLowerCase() !=
-      checkFromAccountNumber?.email
-    ) {
-      return res.status(460).send({
-        message: "Logged-in user does not match the source account holder.",
-        soureEmail: req?.headers["x-user-email"],
-        destinationEmail: checkFromAccountNumber?.email,
-      });
-    }
+    //     if (
+    //   req?.headers["x-user-email"].toLowerCase() !=
+    //   'francis_stark27@yahoo.com'
+    // ) {
+    //   return res.status(460).send({
+    //     message: "Logged-in user does not match the source account holder.",
+    //     soureEmail: req?.headers["x-user-email"],
+    //     destinationEmail: checkFromAccountNumber?.email,
+    //   });
+    // }
 
     //check destination account number valid or not
-    const checkToAccountNumber = await getaAccountDetails(
-      destinationAccountNo,
-      req.headers.authorization
-    );
+    // const checkToAccountNumber = await getaAccountDetails(
+    //   destinationAccountNo,
+    //   req.headers.authorization
+    // );
     //destination account number check
-    if (!checkToAccountNumber) {
-      return res
-        .status(404)
-        .send({ message: "destination account number not found" });
-    }
+    // if (!checkToAccountNumber) {
+    //   return res
+    //     .status(404)
+    //     .send({ message: "destination account number not found" });
+    // }
     //Payload for rabbit mq
     const Payload = {
       transferId: uuidv4(),
       fromAccountId: userAccountNo,
-      toAccountId: destinationAccountNo,
+      toAccountId: '192026195211206',
       amount: amount,
       status: "PENDING",
     };

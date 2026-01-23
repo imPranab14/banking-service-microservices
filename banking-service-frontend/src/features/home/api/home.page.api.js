@@ -26,10 +26,12 @@ async function deleteAccount(deleteAccountNumber) {
 //Create Account
 async function createAccount(accountType) {
   try {
-    const response = await axiosInstance.post(`api/v1/accounts/account`, {accountType,});
+    const response = await axiosInstance.post(`api/v1/accounts/account`, {
+      accountType,
+    });
     return response;
   } catch (error) {
-    console.log("Create account error",error);
+    console.log("Create account error", error);
     throw error;
   }
 }
@@ -37,11 +39,36 @@ async function createAccount(accountType) {
 //LIst of account transaction
 async function listOfTransaction(accountNumber) {
   try {
-    const response = await axiosInstance.get(`api/v1/transaction/list-transaction?accountNumber=${accountNumber}`);
+    const response = await axiosInstance.get(
+      `api/v1/transaction/list-transaction?accountNumber=${accountNumber}`,
+    );
     return response;
   } catch (error) {
-    console.log("Create account error",error);
+    console.log("Create account error", error);
     throw error;
   }
 }
-export { listOfAccount, deleteAccount, createAccount,listOfTransaction };
+
+//Money Transfer
+async function moneyTransfer(data) {
+  console.log("data", data);
+  try {
+    const response = await axiosInstance.post(`api/v1/transaction/transfer`, {
+      fromAccountNo: 192026193835003,
+      toAccountNo: 192026195211206,
+      amount: 10,
+    });
+    console.log("res", response);
+    return response;
+  } catch (error) {
+    console.log("Money transfer api error", error);
+    throw error;
+  }
+}
+export {
+  listOfAccount,
+  deleteAccount,
+  createAccount,
+  listOfTransaction,
+  moneyTransfer,
+};

@@ -1,6 +1,6 @@
 import { Home } from "lucide-react";
 import React, { useState } from "react";
-import listOfTransaction from "../dummy/transactionData";
+//import listOfTransaction from "../dummy/transactionData";
 import * as z from "zod";
 import toast, { Toaster } from "react-hot-toast";
 import {
@@ -12,6 +12,7 @@ import {
   AlertCircle,
   Send,
 } from "lucide-react";
+import { moneyTransfer } from "../api/home.page.api";
 
 function MoneyTransaction({
   selectedAccountNumber,
@@ -25,21 +26,32 @@ function MoneyTransaction({
   //Zod Schema
   const MoneyTransferSchema = z.object({
     fromAccountNo: z.number(),
-    toAccountNo: z.string().min(15).max(15),
-    amount: z.string().min(1),
+    toAccountNo: z.number(),
+    amount: z.number().positive(),
   });
 
-  function handelMoneyTransfer(e) {
+  //Handle Money Transfer
+  async function handelMoneyTransfer(e) {
     e.preventDefault();
     console.log("selectedAccountNumber", typeof e.target.amount.value);
     const moneyTransferData = {
-      fromAccountNo: selectedAccountNumber,
-      toAccountNo: e.target.toAccountNumber.value,
-      amount: e.target.amount.value,
+      fromAccountNo: Number(selectedAccountNumber),
+      toAccountNo: Number(e.target.toAccountNumber.value),
+      amount: Number(e.target.amount.value),
     };
     const parsedData = MoneyTransferSchema.safeParse(moneyTransferData);
     if (!parsedData.success) {
       parsedData.error._zod.def.map((err) => toast.error(err.message));
+    }
+    //Money Transfer API CALL
+    try {
+      const response = await moneyTransfer(moneyTransferData);
+      if (response.status === 202) {
+        toast.success("Money transferred successfully");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Money transfer failed");
     }
   }
   return (
@@ -123,7 +135,7 @@ function MoneyTransaction({
                     />
                   </div>
 
-                  <input type="submit" className="" />
+                  <input type="submit" className="px-5 rounded-lg py-2 bg-blue-700 mt-3 text-white" />
                 </form>
               </div>
             </div>
