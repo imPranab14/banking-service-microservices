@@ -5,6 +5,7 @@ async function connectRabbitMQ() {
   try {
     const connection = await amqp.connect("amqp://localhost");
     const channel = await connection.createChannel();
+    //console.log("Transaction RabbitMQ Channel",channel);
     logger.info("RabbitMQ Connected !");
     //Check Exchange Exits OR NOT
     channel.assertExchange("banking-exchange", "topic", {

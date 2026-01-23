@@ -4,7 +4,6 @@ import axiosInstance from "../../../api/axios.api";
 async function listOfAccount() {
   try {
     const response = await axiosInstance.get("api/v1/accounts/list");
-    console.log("response", response);
     return response.data;
   } catch (error) {
     console.log("list of account api", error);
@@ -27,12 +26,22 @@ async function deleteAccount(deleteAccountNumber) {
 //Create Account
 async function createAccount(accountType) {
   try {
-    const response = await axiosInstance.post(`api/v1/accounts/account`, {
-      accountType,
-    });
+    const response = await axiosInstance.post(`api/v1/accounts/account`, {accountType,});
     return response;
   } catch (error) {
-    throw error
+    console.log("Create account error",error);
+    throw error;
   }
 }
-export { listOfAccount, deleteAccount, createAccount };
+
+//LIst of account transaction
+async function listOfTransaction(accountNumber) {
+  try {
+    const response = await axiosInstance.get(`api/v1/transaction/list-transaction?accountNumber=${accountNumber}`);
+    return response;
+  } catch (error) {
+    console.log("Create account error",error);
+    throw error;
+  }
+}
+export { listOfAccount, deleteAccount, createAccount,listOfTransaction };

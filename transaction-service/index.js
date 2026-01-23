@@ -32,7 +32,7 @@ redisConnect()
 app.use(verifyGatewayToken)
 
 //MSSQL Connected
-connectMSSQL()
+//connectMSSQL()
 
 //RabbitMQ Consumer
 startFailedConsumer()

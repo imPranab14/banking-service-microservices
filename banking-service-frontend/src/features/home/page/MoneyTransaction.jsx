@@ -13,27 +13,33 @@ import {
   Send,
 } from "lucide-react";
 
-function MoneyTransaction({ selectedAccountNumber, setShowMoneyTransaction }) {
-  const [allTransaction, setAllTransaction] = useState(listOfTransaction.data);
+function MoneyTransaction({
+  selectedAccountNumber,
+  setShowMoneyTransaction,
+  accountAllTransaction,
+}) {
+  const [allTransaction, setAllTransaction] = useState(
+    accountAllTransaction || [],
+  );
 
   //Zod Schema
   const MoneyTransferSchema = z.object({
-    fromAccountNumber: z.number().min(16).max(16),
-    toAccountNumber: z.number().min(16).max(16),
+    fromAccountNo: z.number(),
+    toAccountNo: z.string().min(15).max(15),
+    amount: z.string().min(1),
   });
 
   function handelMoneyTransfer(e) {
     e.preventDefault();
+    console.log("selectedAccountNumber", typeof e.target.amount.value);
     const moneyTransferData = {
-      fromAccountNumber: selectedAccountNumber,
-      toAccountNumber: e.target.toAccountNumber.value,
+      fromAccountNo: selectedAccountNumber,
+      toAccountNo: e.target.toAccountNumber.value,
+      amount: e.target.amount.value,
     };
-    console.log("mon", moneyTransferData);
     const parsedData = MoneyTransferSchema.safeParse(moneyTransferData);
     if (!parsedData.success) {
-      toast.error("Invalid Account Number. It should be 16 digits.");
-      console.log("error", parsedData.error._zod.def);
-      return;
+      parsedData.error._zod.def.map((err) => toast.error(err.message));
     }
   }
   return (
@@ -104,8 +110,20 @@ function MoneyTransaction({ selectedAccountNumber, setShowMoneyTransaction }) {
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Amount
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="Enter To Amount"
+                      datatype="number"
+                      name="amount"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
+                    />
+                  </div>
 
-                  <input type="submit" />
+                  <input type="submit" className="" />
                 </form>
               </div>
             </div>
@@ -156,31 +174,31 @@ function MoneyTransaction({ selectedAccountNumber, setShowMoneyTransaction }) {
                       ) : (
                         allTransaction.map((transaction) => (
                           <tr
-                            key={transaction.transferId}
+                            key={transaction.TransferId}
                             className="hover:bg-slate-50 transition-colors"
                           >
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span className="text-sm font-medium text-slate-900">
-                                {transaction.transferId}
+                                {transaction.TransferId}
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span className="text-sm text-slate-600">
-                                {transaction.fromAccountId}
+                                {transaction.FromAccountId}
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span className="text-sm text-slate-600">
-                                {transaction.toAccountId}
+                                {transaction.ToAccountId}
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span className="text-sm font-semibold text-slate-900">
-                                ${transaction.amount.toFixed(2)}
+                                ₹{transaction.Amount}
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              {transaction.status}
+                              {transaction.Status}
                             </td>
                           </tr>
                         ))

@@ -12,6 +12,7 @@ import {
   createAccount,
   deleteAccount,
   listOfAccount,
+  listOfTransaction,
 } from "../api/home.page.api";
 import toast, { Toaster } from "react-hot-toast";
 import user from "../dummy/userdata.js";
@@ -32,9 +33,10 @@ import MoneyTransaction from "./MoneyTransaction.jsx";
 function HomePage() {
   //State for Account List
   const [accountList, setAccountList] = useState();
-  const [userList, setUserList] = useState(user?.users);
+  //const [userList, setUserList] = useState(user?.users);
   const [showMoneyTransaction, setShowMoneyTransaction] = useState(false);
   const [selectedAccountNumber, setSelectedAccountNumber] = useState(null);
+  const [accountAllTransaction, setAccountAllTransaction] = useState({});
 
   //List Account API CALL
 
@@ -85,11 +87,26 @@ function HomePage() {
     }
   }
 
+  //List of transaction function
+  async function getTransactionList(accountNumber) {
+    try {
+      const response = await listOfTransaction(accountNumber);
+      console.log("get_transaction",response);
+      setAccountAllTransaction(response?.data?.data || []);
+    } catch (error) {
+      console.log("List of transaction api error", error);
+      toast.error("Failed to fetch transaction list");
+    }
+  }
+
   //Navigate to Money Transfer Page
-  function navigateToMoneyTransfer(accountNumber) {
+  async function navigateToMoneyTransfer(accountNumber) {
     console.log("account", accountNumber);
-    setShowMoneyTransaction(true);
+    
     setSelectedAccountNumber(accountNumber);
+    await getTransactionList(accountNumber);
+
+    setShowMoneyTransaction(true);
   }
   return (
     <>
@@ -199,7 +216,11 @@ function HomePage() {
           </div>
         </div>
       ) : (
-        <MoneyTransaction  selectedAccountNumber={selectedAccountNumber} setShowMoneyTransaction={setShowMoneyTransaction}/>
+        <MoneyTransaction
+          selectedAccountNumber={selectedAccountNumber}
+          setShowMoneyTransaction={setShowMoneyTransaction}
+          accountAllTransaction={accountAllTransaction}
+        />
       )}
 
       {/* {userList.map((ele,id)=>{
