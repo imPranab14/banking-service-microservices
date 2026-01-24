@@ -12,7 +12,7 @@ import {
   AlertCircle,
   Send,
 } from "lucide-react";
-import { moneyTransfer } from "../api/home.page.api";
+import { isValidAccountNumber, moneyTransfer } from "../api/home.page.api";
 import { Button } from "../../../components/ui/Button";
 
 function MoneyTransaction({
@@ -28,7 +28,7 @@ function MoneyTransaction({
   //Zod Schema
   const MoneyTransferSchema = z.object({
     fromAccountNo: z.number(),
-    toAccountNo: z.number(),
+    toAccountNo: z.number().min(100000000000000, "Account number must be at least 15 digits"),
     amount: z.number().positive(),
   });
 
@@ -42,7 +42,18 @@ function MoneyTransaction({
     };
     const parsedData = MoneyTransferSchema.safeParse(moneyTransferData);
     if (!parsedData.success) {
-      parsedData.error._zod.def.map((err) => toast.error(err.message));
+     return parsedData.error._zod.def.map((err) => toast.error(err.message));
+    }
+    //Check Valid account number
+    try {
+      const isValidToAccount = await isValidAccountNumber(e.target.toAccountNumber.value);
+      console.log("isValidAccount",isValidAccountNumber);
+      if (isValidToAccount.status === 200) {
+        return toast.success("Valid To Account Number");
+      }
+    } catch (error) {
+      console.log("Valid account number error", error);
+      return toast.error("Invalid To Account Number");
     }
     //Money Transfer API CALL
     try {
@@ -51,11 +62,26 @@ function MoneyTransaction({
       if (response.status === 202) {
         toast.success("Money transferred successfully");
       }
+      //Update Transaction List
+      e.target.reset()
     } catch (error) {
       console.log(error);
       toast.error("Money transfer failed");
     } finally {
       setSubmitDisabled(false);
+    }
+  }
+
+  //Status Color 
+  function getStatusColor(status) {
+    if (status === "COMPLETED") {
+      return "bg-red-600 text-green-600 font-semibold";
+    }
+    else if (status === "FAILED") {
+      return "bg-yellow-100 text-red-600 font-semibold";
+    }
+    else {
+      return "bg-blue-100 text-blue-600 font-semibold";
     }
   }
   return (
@@ -219,7 +245,7 @@ function MoneyTransaction({
                                 ₹{transaction.Amount}
                               </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            <td className={`"${getStatusColor(transaction.Status)} px-6 py-4 whitespace-nowrap"`}>
                               {transaction.Status}
                             </td>
                           </tr>

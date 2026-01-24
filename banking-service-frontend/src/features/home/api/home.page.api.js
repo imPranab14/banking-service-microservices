@@ -68,10 +68,25 @@ async function moneyTransfer(data) {
     throw error;
   }
 }
+
+//Valid account number
+async function isValidAccountNumber(accountNumber) {
+  try {
+    const response = await axiosInstance.get(
+      `accounts/validation/?accountNumber=${accountNumber}`,
+    );
+    return response;
+  } catch (error) {
+    console.log("Valid account number api error", error);
+    throw error;
+  }
+}
+
 export {
   listOfAccount,
   deleteAccount,
   createAccount,
   listOfTransaction,
   moneyTransfer,
+  isValidAccountNumber
 };
