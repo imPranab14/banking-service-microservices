@@ -25,19 +25,19 @@ async function handelUserRegister(req, res) {
     const hashPassword = await bcrypt.hash(password, 10);
     const saveData = await User.insertOne({
       name,
-      email,
+      email:email.toLowerCase(),
       password: hashPassword,
     });
-    //rabbitmq
+    //Rabbit MQ Connection
     const channel = await connectRabbitMQ();
-    //queue name
+    //Queue Name
     const queueName = "register_queue";
     const createQueue = await channel.assertQueue(queueName, {
       durable: true,
     });
     console.log("Register Queue Info", createQueue);
 
-    //send to raddit mq
+    //send to Rabbit MQ
     await channel.sendToQueue(
       queueName,
       Buffer.from(
@@ -51,7 +51,7 @@ async function handelUserRegister(req, res) {
       }
     );
 
-    //register api response
+    //Register api response
     res.status(201).json(
       new ApiResponse(201, "new user create successfully", {
         name: saveData.name,
@@ -60,7 +60,7 @@ async function handelUserRegister(req, res) {
     );
   } catch (error) {
     console.log("Register Service Error", error);
-    res.status(500).send(new ApiError(500, "Intrenal Server Error", error));
+    res.status(500).send(new ApiError(500, "Internal Server Error", error));
   }
 }
 
