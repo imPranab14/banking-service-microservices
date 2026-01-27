@@ -15,19 +15,21 @@ import { useState } from "react";
 
 export function AddAccountDialog({accountType}) {
   const [account, setAccount] = useState("");
+  const [open,setOpen]=useState(false)
   const handelSubmit = (e) => {
     e.preventDefault();
     //Send To Parent Component
     accountType(account)
+   setOpen(false)
   };
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Add Account</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Add Account</DialogTitle>
           <DialogDescription>
             Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
@@ -47,14 +49,14 @@ export function AddAccountDialog({accountType}) {
               </select>
             </div>
           </div>
-          <Button type="submit" disabled={!account}>Add Account</Button>
+          <Button  className='mt-5' type="submit" disabled={!account}>Add Account</Button>
         </form>
 
-        <DialogFooter>
+        {/* <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-        </DialogFooter>
+        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

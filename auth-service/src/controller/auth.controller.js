@@ -7,7 +7,6 @@ import cookieParser from "cookie-parser";
 import { LoginSchema, RegisterSchema } from "../schema/auth.schema.js";
 import { ApiError } from "../util/ApiError.js";
 import { ApiResponse } from "../util/ApiResponse.js";
-//import channel from "../config/rabbimq.js"
 import connectRabbitMQ from "../config/rabbimq.js";
 
 //Register Handle

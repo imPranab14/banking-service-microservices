@@ -82,7 +82,7 @@ function HomePage() {
       }
     } catch (error) {
       if (error.status === 400) {
-        toast.error(`${data}   account already present`);
+        toast.error(`${data} account already present`);
       }
     }
   }
