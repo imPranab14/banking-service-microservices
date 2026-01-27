@@ -44,17 +44,6 @@ function MoneyTransaction({
     if (!parsedData.success) {
      return parsedData.error._zod.def.map((err) => toast.error(err.message));
     }
-    //Check Valid account number
-    try {
-      const isValidToAccount = await isValidAccountNumber(e.target.toAccountNumber.value);
-      console.log("isValidAccount",isValidAccountNumber);
-      if (isValidToAccount.status === 200) {
-        return toast.success("Valid To Account Number");
-      }
-    } catch (error) {
-      console.log("Valid account number error", error);
-      return toast.error("Invalid To Account Number");
-    }
     //Money Transfer API CALL
     try {
       setSubmitDisabled(true);
