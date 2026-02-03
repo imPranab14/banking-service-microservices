@@ -1,5 +1,5 @@
 #version: "3.9"
-
+name: api-gateway
 services:
   api:
     build: .
@@ -8,11 +8,11 @@ services:
       - "3000:3000"
     env_file:
       - .env
-  redis:
-    image: redis:7-alpine
-    container_name: redis-container
-    ports:
-      - "6379:6379"
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: redis-container
+  #   ports:
+  #     - "6379:6379"
   prometheus:
     image: prom/prometheus
     container_name: prometheus
