@@ -27,10 +27,17 @@ services:
     image: mongodb/mongodb-community-server:8.0-ubi8
     container_name: mongodb
     ports:
-      - "27017:27017"
+    - "27017:27017"
     volumes:
-      - mongo_data:/data/db
+    - mongo_data:/data/db
+    environment:
+      PORT: 3001
+      MONGO_DB_URL: mongodb://host.docker.internal:27017
+      MONGO_DB_NAME: BankingApplication_DB
+      REDIS_URL: redis://redis:6379
+      RABBITMQ_URL: amqp://rabbitmq:5672
     restart: always
+
   redis:
     image: redis:7
     container_name: redis
