@@ -9,19 +9,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoginSchema } from "../schema/auth.schema";
-import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 
 const LoginFrom = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("Raleigh.Feest86@yahoo.com");
+  const [email, setEmail] = useState(null);
   const [password, setPassword] = useState("123");
 
   //Zustand Store Call
-  const { authUser, fetchLogin } = useAuthStore();
+  const { fetchLogin } = useAuthStore();
   //Handel Login From
   async function handelLogin(e) {
     e.preventDefault();
+    //Request Login Data
     const loginReqData = {
       email,
       password,
@@ -30,11 +29,6 @@ const LoginFrom = () => {
     const { data } = LoginSchema.safeParse(loginReqData);
     //Login API Call
     await fetchLogin(data);
-    //Navigate to home page if authorized user
-    console.log("auth",authUser);
-    // if (authUser) {
-    //   navigate("/home");
-    // }
   }
 
   return (
