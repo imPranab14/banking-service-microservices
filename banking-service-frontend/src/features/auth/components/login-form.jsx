@@ -10,10 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoginSchema } from "../schema/auth.schema";
 import { useAuthStore } from "../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 const LoginFrom = () => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState("123");
+  const navigate = useNavigate();
+
 
   //Zustand Store Call
   const { fetchLogin } = useAuthStore();
@@ -29,6 +32,7 @@ const LoginFrom = () => {
     const { data } = LoginSchema.safeParse(loginReqData);
     //Login API Call
     await fetchLogin(data);
+    navigate("/home");
   }
 
   return (
