@@ -73,6 +73,8 @@ function MoneyTransaction({
       return "bg-blue-100 text-blue-600 font-semibold";
     }
   }
+
+  console.log("allTransaction",allTransaction);
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-4">
@@ -209,7 +211,7 @@ function MoneyTransaction({
                           </td>
                         </tr>
                       ) : (
-                        allTransaction.map((transaction) => (
+                        Array.isArray(allTransaction) && allTransaction?.map((transaction) => (
                           <tr
                             key={transaction.TransferId}
                             className="hover:bg-slate-50 transition-colors"

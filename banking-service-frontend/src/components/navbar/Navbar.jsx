@@ -1,11 +1,18 @@
-import { logoutApi } from "../../features/auth/api/auth.api";
+import { useAuthStore } from "../../features/auth/store/useAuthStore";
 
-//const handelLogout = logoutApi();
 const Navbar = () => {
+  const { fetchLogout } = useAuthStore();
   return (
-    <nav className="flex items-center px-6 py-4" style={{ background: "#222", color: "#fff",justifyContent:"space-between" }}>
+    <nav
+      className="flex items-center px-6 py-4"
+      style={{
+        background: "#222",
+        color: "#fff",
+        justifyContent: "space-between",
+      }}
+    >
       <h3>My App</h3>
-      <button onClick={()=> logoutApi()}>Logout</button>
+      <button onClick={() => fetchLogout()}>Logout</button>
     </nav>
   );
 };

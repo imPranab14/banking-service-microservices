@@ -26,7 +26,7 @@ async function logoutApi() {
   try {
     const response = await axiosInstance.post("api/v1/auth/logout");
     console.log("Logout Button Res", response);
-    return response?.data;
+    return response;
   } catch (error) {
     console.log("Logout Error", error);
     throw Error("Logout Error");

@@ -19,7 +19,7 @@ const LoginFrom = () => {
 
 
   //Zustand Store Call
-  const { fetchLogin } = useAuthStore();
+  const { error,fetchLogin } = useAuthStore();
   //Handel Login From
   async function handelLogin(e) {
     e.preventDefault();
@@ -75,6 +75,7 @@ const LoginFrom = () => {
           </Field>
         </FieldGroup>
       </form>
+      
     </>
   );
 };
