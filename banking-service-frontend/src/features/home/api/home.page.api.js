@@ -78,7 +78,7 @@ async function isValidAccountNumber(accountNumber) {
     return response;
   } catch (error) {
     console.log("Valid account number api error", error);
-    throw error;
+    throw error ;
   }
 }
 

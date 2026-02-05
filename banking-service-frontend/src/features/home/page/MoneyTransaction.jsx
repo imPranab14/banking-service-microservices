@@ -1,9 +1,9 @@
 import { Home } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //import listOfTransaction from "../dummy/transactionData";
 import * as z from "zod";
 import toast, { Toaster } from "react-hot-toast";
-import {useForm} from "react-hook-form"
+import { useForm } from "react-hook-form";
 import {
   ArrowRightLeft,
   CreditCard,
@@ -26,23 +26,53 @@ function MoneyTransaction({
     accountAllTransaction || [],
   );
   const [submitDisabled, setSubmitDisabled] = useState(false);
+  const [validAccountNumberLoader, setValidAccountNumberLoader] =
+    useState(false);
+  const [validAccountNumberIconVisible, setValidAccountNumberIconVisible] =
+    useState(false);
 
   //Zod Schema
   const MoneyTransferSchema = z.object({
     fromAccountNo: z.number(),
-    toAccountNo: z.number().min(100000000000000, "Account number must be at least 15 digits"),
+    toAccountNo: z
+      .number()
+      .min(100000000000000, "Account number must be at least 15 digits"),
     amount: z.number().positive(),
   });
 
-
   //NOTE REACT HOOKS FORM
-  const {register,handleSubmit,setValue,reset}=useForm()
+  const { register, handleSubmit, watch, setValue, reset } = useForm();
 
-  //Set From Account Number  
- setValue("fromAccountNo",selectedAccountNumber)
+  //Watch To Account Number
+  const onChangeToAccountNumber = watch("toAccountNumber");
+
+  //IMPORTANT Debounce Api Call
+  useEffect(() => {
+    if (!onChangeToAccountNumber) return;
+    const time = setTimeout(async () => {
+      try {
+        setValidAccountNumberLoader(true);
+        //BUG Account Number Check
+        const response = await isValidAccountNumber(onChangeToAccountNumber);
+        if (response.status === 200) {
+          setValidAccountNumberIconVisible(true);
+        }
+      } catch (error) {
+        console.log("Failed to check account number", error);
+        toast.error("Invalid Account Number");
+      } finally {
+        setValidAccountNumberLoader(false);
+      }
+    }, 2 * 1000);
+    //Clear Timeout
+    return () => clearTimeout(time);
+  }, [onChangeToAccountNumber]);
+
+  //Set From Account Number
+  setValue("fromAccountNo", selectedAccountNumber);
   //Handle Money Transfer
   async function handelMoneyTransfer(e) {
-    console.log("Form_Data",e);
+    console.log("Form_Data", e);
     //e.preventDefault();
     const moneyTransferData = {
       fromAccountNo: Number(e.fromAccountNo),
@@ -51,7 +81,7 @@ function MoneyTransaction({
     };
     const parsedData = MoneyTransferSchema.safeParse(moneyTransferData);
     if (!parsedData.success) {
-     return parsedData.error._zod.def.map((err) => toast.error(err.message));
+      return parsedData.error._zod.def.map((err) => toast.error(err.message));
     }
     //Money Transfer API CALL
     try {
@@ -59,7 +89,7 @@ function MoneyTransaction({
       const response = await moneyTransfer(moneyTransferData);
       if (response.status === 202) {
         toast.success("Money transferred successfully");
-        reset()//Reset Form 
+        reset(); //Reset Form
       }
       //Update Transaction List
     } catch (error) {
@@ -70,20 +100,18 @@ function MoneyTransaction({
     }
   }
 
-  //Status Color 
+  //Status Color
   function getStatusColor(status) {
     if (status === "COMPLETED") {
       return "bg-red-600 text-green-600 font-semibold";
-    }
-    else if (status === "FAILED") {
+    } else if (status === "FAILED") {
       return "bg-yellow-100 text-red-600 font-semibold";
-    }
-    else {
+    } else {
       return "bg-blue-100 text-blue-600 font-semibold";
     }
   }
 
-  console.log("allTransaction",allTransaction);
+  //console.log("allTransaction", allTransaction);
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-4">
@@ -135,22 +163,20 @@ function MoneyTransaction({
                     <input
                       type="number"
                       {...register("fromAccountNo")}
-                      //value={selectedAccountNumber}
                       disabled
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
                     />
                   </div>
                   <div>
+                    {validAccountNumberLoader && <p>Loading.....</p>}
+                    {validAccountNumberIconVisible && <p>Valid Number</p>}
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       To Account
                     </label>
                     <input
-                      type="number"
                       placeholder="Enter To Account Number"
-                       {...register("toAccountNumber")}
-                      // name="toAccountNumber"
-                      // maxLength={5}
-                      // min={5}
+                      {...register("toAccountNumber")}
+                      type="number"
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
                     />
                   </div>
@@ -162,8 +188,6 @@ function MoneyTransaction({
                       type="number"
                       placeholder="Enter To Amount"
                       {...register("amount")}
-                      // datatype="number"
-                      // name="amount"
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
                     />
                   </div>
@@ -223,7 +247,8 @@ function MoneyTransaction({
                           </td>
                         </tr>
                       ) : (
-                        Array.isArray(allTransaction) && allTransaction?.map((transaction) => (
+                        Array.isArray(allTransaction) &&
+                        allTransaction?.map((transaction) => (
                           <tr
                             key={transaction.TransferId}
                             className="hover:bg-slate-50 transition-colors"
@@ -248,7 +273,9 @@ function MoneyTransaction({
                                 ₹{transaction.Amount}
                               </span>
                             </td>
-                            <td className={`"${getStatusColor(transaction.Status)} px-6 py-4 whitespace-nowrap"`}>
+                            <td
+                              className={`"${getStatusColor(transaction.Status)} px-6 py-4 whitespace-nowrap"`}
+                            >
                               {transaction.Status}
                             </td>
                           </tr>
