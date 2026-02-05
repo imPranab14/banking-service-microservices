@@ -80,8 +80,8 @@ async function handelTransfer(req, res) {
     //Payload for rabbit mq
     const Payload = {
       transferId: uuidv4(),
-      fromAccountId: userAccountNo,
-      toAccountId: "192026195211206",
+      fromAccountId: userAccountNo,//IMPORTANT FROM ACCOUNT NUMBER (LOGIN USER ACCOUNT)
+      toAccountId: destinationAccountNo,//IMPORTANT TO ACCOUNT NUMBER
       amount: amount,
       status: "PENDING",
     };

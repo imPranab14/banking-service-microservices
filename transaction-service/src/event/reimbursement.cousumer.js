@@ -10,7 +10,7 @@ export async function startReimbursement() {
 
     //Update in mssql
     const res = await pool.query(
-      `UPDATE ${process.env.DB_NAME}.[dbo].[BankTransfers] SET Status='COMPENSATED''
+      `UPDATE ${process.env.DB_NAME}.[dbo].[BankTransfers] SET Status='COMPENSATED'
       WHERE TransferId='${event.transferId}'`
     );
     console.log("MSSQL_Query_Response_COMPENSATED", res?.rowsAffected);
