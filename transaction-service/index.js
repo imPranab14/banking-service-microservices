@@ -39,8 +39,8 @@ connectMSSQL()
 //RabbitMQ Consumer
 startFailedConsumer()
 startCreditSuccess()
-// startCompensateConsumer()
-// startReimbursement()
+startCompensateConsumer()
+startReimbursement()
 
 //Import All Router
 //Index Router
