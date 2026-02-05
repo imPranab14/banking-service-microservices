@@ -6,7 +6,7 @@ const sqlConfig = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME ,
   server: "localhost",
-  port: 1435, // SQL Server port
+  port: 1433, // SQL Server port
   pool: {
     max: 10,
     min: 0,

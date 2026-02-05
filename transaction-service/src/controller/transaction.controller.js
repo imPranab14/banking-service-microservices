@@ -6,6 +6,8 @@ import insertBankTransfer from "../service/insertBankTransfer.js";
 import { ApiError } from "../utils/ApiError.js";
 import { v4 as uuidv4 } from "uuid";
 
+
+//Money Transfer Controller
 async function handelTransfer(req, res) {
   const transferPayload = TransferSchema.safeParse(req.body);
   try {
@@ -122,6 +124,9 @@ async function handelTransfer(req, res) {
   }
 }
 
+
+
+//TODO //NOT IN Use
 async function handelTransaction(req, res) {
   const { transactionId } = req?.params;
   try {
@@ -145,6 +150,8 @@ async function handelTransaction(req, res) {
   }
 }
 
+
+//List Of All Transaction For A Particular Account Number
 async function handelAllTransaction(req, res) {
   const { accountNumber } = req.query;
 
