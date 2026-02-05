@@ -3,6 +3,7 @@ import React, { useState } from "react";
 //import listOfTransaction from "../dummy/transactionData";
 import * as z from "zod";
 import toast, { Toaster } from "react-hot-toast";
+import {useForm} from "react-hook-form"
 import {
   ArrowRightLeft,
   CreditCard,
@@ -20,6 +21,7 @@ function MoneyTransaction({
   setShowMoneyTransaction,
   accountAllTransaction,
 }) {
+  //State Value
   const [allTransaction, setAllTransaction] = useState(
     accountAllTransaction || [],
   );
@@ -32,13 +34,20 @@ function MoneyTransaction({
     amount: z.number().positive(),
   });
 
+
+  //NOTE REACT HOOKS FORM
+  const {register,handleSubmit,setValue,reset}=useForm()
+
+  //Set From Account Number  
+ setValue("fromAccountNo",selectedAccountNumber)
   //Handle Money Transfer
   async function handelMoneyTransfer(e) {
-    e.preventDefault();
+    console.log("Form_Data",e);
+    //e.preventDefault();
     const moneyTransferData = {
-      fromAccountNo: Number(selectedAccountNumber),
-      toAccountNo: Number(e.target.toAccountNumber.value),
-      amount: Number(e.target.amount.value),
+      fromAccountNo: Number(e.fromAccountNo),
+      toAccountNo: Number(e.toAccountNumber),
+      amount: Number(e.amount),
     };
     const parsedData = MoneyTransferSchema.safeParse(moneyTransferData);
     if (!parsedData.success) {
@@ -50,9 +59,9 @@ function MoneyTransaction({
       const response = await moneyTransfer(moneyTransferData);
       if (response.status === 202) {
         toast.success("Money transferred successfully");
+        reset()//Reset Form 
       }
       //Update Transaction List
-      e.target.reset()
     } catch (error) {
       console.log(error);
       toast.error("Money transfer failed");
@@ -118,14 +127,15 @@ function MoneyTransaction({
                   </div>
                 </div>
 
-                <form onSubmit={(e) => handelMoneyTransfer(e)}>
+                <form onSubmit={handleSubmit(handelMoneyTransfer)}>
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       From Account
                     </label>
                     <input
                       type="number"
-                      value={selectedAccountNumber}
+                      {...register("fromAccountNo")}
+                      //value={selectedAccountNumber}
                       disabled
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
                     />
@@ -137,9 +147,10 @@ function MoneyTransaction({
                     <input
                       type="number"
                       placeholder="Enter To Account Number"
-                      name="toAccountNumber"
-                      maxLength={5}
-                      min={5}
+                       {...register("toAccountNumber")}
+                      // name="toAccountNumber"
+                      // maxLength={5}
+                      // min={5}
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
                     />
                   </div>
@@ -150,8 +161,9 @@ function MoneyTransaction({
                     <input
                       type="number"
                       placeholder="Enter To Amount"
-                      datatype="number"
-                      name="amount"
+                      {...register("amount")}
+                      // datatype="number"
+                      // name="amount"
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
                     />
                   </div>
