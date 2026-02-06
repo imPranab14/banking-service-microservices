@@ -73,7 +73,7 @@ async function moneyTransfer(data) {
 async function isValidAccountNumber(accountNumber) {
   try {
     const response = await axiosInstance.get(
-      `accounts/validation/?accountNumber=${accountNumber}`,
+      `api/v1/accounts/validation/?accountNumber=${accountNumber}`,
     );
     return response;
   } catch (error) {
