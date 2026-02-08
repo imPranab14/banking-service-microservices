@@ -169,10 +169,10 @@ function MoneyTransaction({
                     />
                   </div>
                   <div>
-                    {validAccountNumberLoader && <p>Loading.....</p>}
+                    
                     
                     <label className="block text-sm font-medium text-slate-700 mb-2">
-                      To Account
+                      To Account ({validAccountNumberLoader && <p>Loading.....</p>})
                     </label>
                     <div className="flex items-center gap-1 flex-row-reverse">
                       {validAccountNumberIconVisible && (
