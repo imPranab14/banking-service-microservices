@@ -1,4 +1,4 @@
-import { Home } from "lucide-react";
+import { BadgeCheck, Home } from "lucide-react";
 import React, { useEffect, useState } from "react";
 //import listOfTransaction from "../dummy/transactionData";
 import * as z from "zod";
@@ -56,6 +56,7 @@ function MoneyTransaction({
         const response = await isValidAccountNumber(onChangeToAccountNumber);
         if (response.status === 200) {
           setValidAccountNumberIconVisible(true);
+          toast.success("Account Valid");
         }
       } catch (error) {
         console.log("Failed to check account number", error);
@@ -63,7 +64,7 @@ function MoneyTransaction({
       } finally {
         setValidAccountNumberLoader(false);
       }
-    }, 2 * 1000);
+    }, 500);
     //Clear Timeout
     return () => clearTimeout(time);
   }, [onChangeToAccountNumber]);
@@ -169,16 +170,23 @@ function MoneyTransaction({
                   </div>
                   <div>
                     {validAccountNumberLoader && <p>Loading.....</p>}
-                    {validAccountNumberIconVisible && <p>Valid Number</p>}
+                    
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       To Account
                     </label>
-                    <input
-                      placeholder="Enter To Account Number"
-                      {...register("toAccountNumber")}
-                      type="number"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
-                    />
+                    <div className="flex items-center gap-1 flex-row-reverse">
+                      {validAccountNumberIconVisible && (
+                        <BadgeCheck color="green" />
+                      )}
+                      <input
+                        placeholder="Enter To Account Number"
+                        {...register("toAccountNumber")}
+                        disabled={validAccountNumberLoader}
+                        type="number"
+                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
+                      />
+                      
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">

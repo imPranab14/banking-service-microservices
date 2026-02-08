@@ -132,14 +132,14 @@ async function handelTransaction(req, res) {
         "accountDetails.balance > convertIntoTwoDecimal",
         accountDetails.balance >= convertIntoTwoDecimal,
         accountDetails.balance,
-        convertIntoTwoDecimal
+        convertIntoTwoDecimal,
       );
       if (accountDetails.balance > convertIntoTwoDecimal) {
         //if balence is zero
         const debitAmount = await account.findOneAndUpdate(
           { accountNumber: accountNumber },
           { $inc: { balance: -convertIntoTwoDecimal } },
-          { new: true }
+          { new: true },
         );
         return res.status(200).json({
           message: "amount debit successfully",
@@ -159,7 +159,7 @@ async function handelTransaction(req, res) {
       const creditAmount = await account.findOneAndUpdate(
         { accountNumber: accountNumber },
         { $inc: { balance: convertIntoTwoDecimal } },
-        { new: true }
+        { new: true },
       );
 
       return res.status(200).json({
@@ -181,6 +181,7 @@ async function handelTransaction(req, res) {
 
 //Account validation check
 async function handelAccountNumberCheck(req, res) {
+  console.log("Valid_Account_Number--");
   const { accountNumber } = req?.query;
 
   try {
@@ -194,10 +195,22 @@ async function handelAccountNumberCheck(req, res) {
         message: "account not found",
       });
     }
-    res.status(200).send({
-      status:checkAccountNumber?.accountStatus,
-      email:checkAccountNumber?.email
-    })
+
+    //Custom 5 seconde delay
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        res.status(200).send({
+          status: checkAccountNumber?.accountStatus,
+          email: checkAccountNumber?.email,
+        });
+        resolve();
+      }, 5 * 1000);
+    });
+
+    // res.status(200).send({
+    //   status:checkAccountNumber?.accountStatus,
+    //   email:checkAccountNumber?.email
+    // })
   } catch (error) {
     console.log("Account number find error", error);
     res.status(500).send({

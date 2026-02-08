@@ -160,7 +160,8 @@ async function handelAllTransaction(req, res) {
     const pool = await connectMSSQL();
     //MSSQL Query
     const data = await pool.query(
-      `SELECT *FROM [${process.env.DB_NAME}].[dbo].[BankTransfers] where FromAccountId=${accountNumber}`,
+      `SELECT *FROM [${process.env.DB_NAME}].[dbo].[BankTransfers] where FromAccountId=${accountNumber}
+      ORDER BY CreatedAt DESC`,
     );
     //Api Response
     res.status(200).send({
