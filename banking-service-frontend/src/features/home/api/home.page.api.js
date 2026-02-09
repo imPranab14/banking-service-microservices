@@ -56,13 +56,14 @@ async function moneyTransfer(data) {
       `api/v1/transaction/transfer`,
       data,
     );
-    return new Promise(function (resolve) {
-      setTimeout(() => {
-        resolve(response);
-      }, 5 * 1000);
-    });
+    //Custom Delay
+    // return new Promise(function (resolve) {
+    //   setTimeout(() => {
+    //     resolve(response);
+    //   }, 5 * 1000);
+    // });
 
-   // return response;
+   return response;
   } catch (error) {
     console.log("Money transfer api error", error);
     throw error;

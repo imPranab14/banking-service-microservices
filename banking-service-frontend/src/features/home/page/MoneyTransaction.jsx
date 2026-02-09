@@ -1,17 +1,11 @@
 import { BadgeCheck, Home } from "lucide-react";
 import React, { useEffect, useState } from "react";
-//import listOfTransaction from "../dummy/transactionData";
 import * as z from "zod";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import {
   ArrowRightLeft,
   CreditCard,
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Send,
 } from "lucide-react";
 import { isValidAccountNumber, moneyTransfer } from "../api/home.page.api";
 import { Button } from "../../../components/ui/Button";
@@ -19,12 +13,10 @@ import { Button } from "../../../components/ui/Button";
 function MoneyTransaction({
   selectedAccountNumber,
   setShowMoneyTransaction,
-  accountAllTransaction,
+  accountAllTransaction=[],
 }) {
   //State Value
-  const [allTransaction, setAllTransaction] = useState(
-    accountAllTransaction || [],
-  );
+  const [allTransaction, setAllTransaction] = useState([]);
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const [validAccountNumberLoader, setValidAccountNumberLoader] =
     useState(false);
@@ -112,7 +104,15 @@ function MoneyTransaction({
     }
   }
 
-  //console.log("allTransaction", allTransaction);
+  //All Transaction Props value set
+  function handelListOfAllTransaction(){
+    setAllTransaction(accountAllTransaction)
+  }
+  useEffect(()=>{
+    handelListOfAllTransaction()
+  },{accountAllTransaction})
+
+  console.log("allTransaction", allTransaction);
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-4">
@@ -171,8 +171,8 @@ function MoneyTransaction({
                   <div>
                     
                     
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      To Account ({validAccountNumberLoader && <p>Loading.....</p>})
+                    <label className="text-sm font-medium text-slate-700 mb-2 flex items-center">
+                      To Account {validAccountNumberLoader && <p>Loading.....</p>}
                     </label>
                     <div className="flex items-center gap-1 flex-row-reverse">
                       {validAccountNumberIconVisible && (
