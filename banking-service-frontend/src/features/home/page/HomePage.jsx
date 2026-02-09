@@ -15,18 +15,6 @@ import {
   listOfTransaction,
 } from "../api/home.page.api";
 import toast, { Toaster } from "react-hot-toast";
-import user from "../dummy/userdata.js";
-import { Button } from "../../../components/ui/button.jsx";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../../components/ui/dialog.jsx";
 import { AddAccountDialog } from "./AddAccountDialog.jsx";
 import MoneyTransaction from "./MoneyTransaction.jsx";
 
@@ -102,8 +90,9 @@ function HomePage() {
   //Navigate to Money Transfer Page
   async function navigateToMoneyTransfer(accountNumber) {
     console.log("account", accountNumber);
-    
     setSelectedAccountNumber(accountNumber);
+
+    //IMPORTANT List Transaction API Call
     await getTransactionList(accountNumber);
 
     setShowMoneyTransaction(true);
@@ -220,17 +209,9 @@ function HomePage() {
           selectedAccountNumber={selectedAccountNumber}
           setShowMoneyTransaction={setShowMoneyTransaction}
           accountAllTransaction={accountAllTransaction}
+          getTransactionList={getTransactionList}
         />
       )}
-
-      {/* {userList.map((ele,id)=>{
-            return(
-              <>
-              <h1 key={id}>Name : {ele.firstName} {ele.lastName}</h1>
-              </>
-            )
-          })} */}
-
       <Toaster />
     </>
   );

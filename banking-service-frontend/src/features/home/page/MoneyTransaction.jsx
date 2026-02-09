@@ -14,6 +14,7 @@ function MoneyTransaction({
   selectedAccountNumber,
   setShowMoneyTransaction,
   accountAllTransaction=[],
+  getTransactionList
 }) {
   //State Value
   const [allTransaction, setAllTransaction] = useState([]);
@@ -82,6 +83,10 @@ function MoneyTransaction({
       const response = await moneyTransfer(moneyTransferData);
       if (response.status === 202) {
         toast.success("Money transferred successfully");
+        //NOTE Call Transaction API 
+        getTransactionList(selectedAccountNumber)
+        //Verify Account Icon Visible 
+        setValidAccountNumberIconVisible(false)
         reset(); //Reset Form
       }
       //Update Transaction List
@@ -110,7 +115,7 @@ function MoneyTransaction({
   }
   useEffect(()=>{
     handelListOfAllTransaction()
-  },{accountAllTransaction})
+  },[accountAllTransaction])
 
   console.log("allTransaction", allTransaction);
   return (
