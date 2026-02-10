@@ -117,7 +117,16 @@ function MoneyTransaction({
     handelListOfAllTransaction()
   },[accountAllTransaction])
 
-  console.log("allTransaction", allTransaction);
+  //NOTE Pagination Implement
+  const [page,setPage]=useState(0)
+  const rowsPerPage = 5;
+  const startIndex=page
+  const nextIndex=page + rowsPerPage
+  const currentRows = allTransaction.splice(startIndex,nextIndex)
+  
+  console.log("startIndex",startIndex,nextIndex,page);
+
+  console.log("allTransaction", allTransaction,accountAllTransaction,currentRows);
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-4">
@@ -249,7 +258,7 @@ function MoneyTransaction({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200">
-                      {allTransaction.length === 0 ? (
+                      {currentRows.length === 0 ? (
                         <tr>
                           <td
                             colSpan={6}
@@ -260,8 +269,8 @@ function MoneyTransaction({
                           </td>
                         </tr>
                       ) : (
-                        Array.isArray(allTransaction) &&
-                        allTransaction?.map((transaction) => (
+                        Array.isArray(currentRows) &&
+                        currentRows?.map((transaction) => (
                           <tr
                             key={transaction.TransferId}
                             className="hover:bg-slate-50 transition-colors"
@@ -296,6 +305,10 @@ function MoneyTransaction({
                       )}
                     </tbody>
                   </table>
+                  <button onClick={()=> setPage((pre)=> pre - rowsPerPage)}>Previous</button>
+                  <span>Total Page {allTransaction.length}</span>
+                  
+                   <button onClick={()=> setPage((pre)=> pre + rowsPerPage )}>next</button>
                 </div>
               </div>
             </div>
