@@ -1,15 +1,22 @@
 //import { useState } from 'react'
-import AppRouter from './router/AppRouter'
+import AppRouter from "./router/AppRouter";
 //import './App.css'
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+
+// NOTE Create a client
+const queryClient = new QueryClient();
 
 function App() {
-  //const [count, setCount] = useState(0)
-
   return (
     <>
-    <AppRouter/>
+      <QueryClientProvider client={queryClient}>
+        <AppRouter />
+      </QueryClientProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

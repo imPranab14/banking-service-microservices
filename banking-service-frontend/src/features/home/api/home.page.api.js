@@ -56,14 +56,8 @@ async function moneyTransfer(data) {
       `api/v1/transaction/transfer`,
       data,
     );
-    //Custom Delay
-    // return new Promise(function (resolve) {
-    //   setTimeout(() => {
-    //     resolve(response);
-    //   }, 5 * 1000);
-    // });
 
-   return response;
+    return response;
   } catch (error) {
     console.log("Money transfer api error", error);
     throw error;
@@ -79,7 +73,27 @@ async function isValidAccountNumber(accountNumber) {
     return response;
   } catch (error) {
     console.log("Valid account number api error", error);
-    throw error ;
+    throw error;
+  }
+}
+
+//Slow api response for check ten stack query
+
+//LIst of account transaction
+async function slowListOfTransaction() {
+  try {
+    const response = await axiosInstance.get(
+      `api/v1/transaction/list-transaction?accountNumber=172026178013987`,
+    );
+    //Return delay response
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(response.data);
+      }, 5 * 1000);
+    });
+  } catch (error) {
+    console.log("slow transaction api response", error);
+    throw error;
   }
 }
 
@@ -89,5 +103,6 @@ export {
   createAccount,
   listOfTransaction,
   moneyTransfer,
-  isValidAccountNumber
+  isValidAccountNumber,
+  slowListOfTransaction,
 };

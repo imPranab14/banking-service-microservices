@@ -4,6 +4,7 @@ import { LoginPage } from "../features/auth/page/login-page";
 import HomePage from "../features/home/page/HomePage";
 import MainLayout from "../components/layout/MainLayout";
 import ProtectedRoute from "./ProtectedRoute";
+import SlowResponsePage from "../features/home/page/SlowResponsePage";
 
 const AppRouter = () => {
  
@@ -17,6 +18,7 @@ const AppRouter = () => {
         <Route element={<ProtectedRoute/>}>
           <Route element={<MainLayout />}>
             <Route path="/home" element={<HomePage />} />
+            <Route path="/slow-page" element={<SlowResponsePage />} />
           </Route>
         </Route>
 

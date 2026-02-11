@@ -3,18 +3,15 @@ import React, { useEffect, useState } from "react";
 import * as z from "zod";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import {
-  ArrowRightLeft,
-  CreditCard,
-} from "lucide-react";
+import { ArrowRightLeft, CreditCard } from "lucide-react";
 import { isValidAccountNumber, moneyTransfer } from "../api/home.page.api";
 import { Button } from "../../../components/ui/Button";
 
 function MoneyTransaction({
   selectedAccountNumber,
   setShowMoneyTransaction,
-  accountAllTransaction=[],
-  getTransactionList
+  accountAllTransaction = [],
+  getTransactionList,
 }) {
   //State Value
   const [allTransaction, setAllTransaction] = useState([]);
@@ -83,18 +80,19 @@ function MoneyTransaction({
       const response = await moneyTransfer(moneyTransferData);
       if (response.status === 202) {
         toast.success("Money transferred successfully");
-        //NOTE Call Transaction API 
-        getTransactionList(selectedAccountNumber)
-        //Verify Account Icon Visible 
-        setValidAccountNumberIconVisible(false)
-        reset(); //Reset Form
+        //NOTE Call Transaction API
+        getTransactionList(selectedAccountNumber);
       }
-      //Update Transaction List
     } catch (error) {
-      console.log(error);
-      toast.error("Money transfer failed");
+      console.log("Money transfer failed", error);
+      toast.error(
+        `${error?.response?.data.message || "Money transfer failed"}`,
+      );
     } finally {
       setSubmitDisabled(false);
+      reset(); //Reset Form
+      //Verify Account Icon Visible
+      setValidAccountNumberIconVisible(false);
     }
   }
 
@@ -110,23 +108,23 @@ function MoneyTransaction({
   }
 
   //All Transaction Props value set
-  function handelListOfAllTransaction(){
-    setAllTransaction(accountAllTransaction)
+  function handelListOfAllTransaction() {
+    setAllTransaction(accountAllTransaction);
   }
-  useEffect(()=>{
-    handelListOfAllTransaction()
-  },[accountAllTransaction])
+  useEffect(() => {
+    handelListOfAllTransaction();
+  }, [accountAllTransaction]);
 
   //NOTE Pagination Implement
-  const [page,setPage]=useState(0)
-  const rowsPerPage = 5;
-  const startIndex=page
-  const nextIndex=page + rowsPerPage
-  const currentRows = allTransaction.splice(startIndex,nextIndex)
-  
-  console.log("startIndex",startIndex,nextIndex,page);
+  // const [page,setPage]=useState(0)
+  // const rowsPerPage = 5;
+  // const startIndex=page
+  // const nextIndex=page + rowsPerPage
+  // const currentRows = allTransaction.splice(startIndex,nextIndex)
 
-  console.log("allTransaction", allTransaction,accountAllTransaction,currentRows);
+  // console.log("startIndex",startIndex,nextIndex,page);
+
+  // console.log("allTransaction", allTransaction,accountAllTransaction,currentRows);
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-4">
@@ -154,7 +152,7 @@ function MoneyTransaction({
           </div>
 
           <div className="grid lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-1">
+            <div className="col-span-12 lg:col-span-1">
               <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-200">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-3 bg-blue-50 rounded-lg">
@@ -183,10 +181,9 @@ function MoneyTransaction({
                     />
                   </div>
                   <div>
-                    
-                    
                     <label className="text-sm font-medium text-slate-700 mb-2 flex items-center">
-                      To Account {validAccountNumberLoader && <p>Loading.....</p>}
+                      To Account{" "}
+                      {validAccountNumberLoader && <p>Loading.....</p>}
                     </label>
                     <div className="flex items-center gap-1 flex-row-reverse">
                       {validAccountNumberIconVisible && (
@@ -199,7 +196,6 @@ function MoneyTransaction({
                         type="number"
                         className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium cursor-not-allowed"
                       />
-                      
                     </div>
                   </div>
                   <div>
@@ -258,7 +254,7 @@ function MoneyTransaction({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200">
-                      {currentRows.length === 0 ? (
+                      {allTransaction.length === 0 ? (
                         <tr>
                           <td
                             colSpan={6}
@@ -269,8 +265,8 @@ function MoneyTransaction({
                           </td>
                         </tr>
                       ) : (
-                        Array.isArray(currentRows) &&
-                        currentRows?.map((transaction) => (
+                        Array.isArray(allTransaction) &&
+                        allTransaction?.map((transaction) => (
                           <tr
                             key={transaction.TransferId}
                             className="hover:bg-slate-50 transition-colors"
@@ -305,10 +301,10 @@ function MoneyTransaction({
                       )}
                     </tbody>
                   </table>
-                  <button onClick={()=> setPage((pre)=> pre - rowsPerPage)}>Previous</button>
+                  {/* <button onClick={()=> setPage((pre)=> pre - rowsPerPage)}>Previous</button>
                   <span>Total Page {allTransaction.length}</span>
                   
-                   <button onClick={()=> setPage((pre)=> pre + rowsPerPage )}>next</button>
+                   <button onClick={()=> setPage((pre)=> pre + rowsPerPage )}>next</button> */}
                 </div>
               </div>
             </div>
