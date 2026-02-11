@@ -218,10 +218,29 @@ async function handelAccountNumberCheck(req, res) {
     });
   }
 }
+
+//Slow Response
+async function handelSlowResponse(req, res) {
+  //Check the account number
+  try {
+    const accountDetails = await account.findOne({
+      accountNumber: 172026178013987,
+    });
+    //5 sec delay response
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(res.status(200).send(accountDetails));
+      }, 5 * 1000);
+    });
+  } catch (error) {
+    console.log("Slow api error", error);
+  }
+}
 export {
   handelCreateNewAccount,
   handelListOfAccount,
   handelDeleteBankAccount,
   handelTransaction,
   handelAccountNumberCheck,
+  handelSlowResponse,
 };

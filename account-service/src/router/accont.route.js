@@ -6,6 +6,7 @@ import {
   handelDeleteBankAccount,
   handelListOfAccount,
   handelTransaction,
+  handelSlowResponse
 } from "../controller/account.controller.js";
 
 const accountRouter = Router();
@@ -19,5 +20,8 @@ accountRouter.get('/validation',handelAccountNumberCheck)
 
 //Internal transaction 
 accountRouter.post('/internal/transaction',handelTransaction)
+
+//NOTE SLOW API 
+ accountRouter.get("/slow",handelSlowResponse);
 
 export default accountRouter;
