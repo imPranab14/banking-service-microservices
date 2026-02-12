@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,7 +10,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
+  SidebarFooter,
+} from "@/components/ui/sidebar";
+import { useAuthStore } from "../features/auth/store/useAuthStore";
 
 // This is sample data.
 const data = {
@@ -30,15 +32,15 @@ const data = {
       ],
     },
   ],
-}
+};
 
-export function AppSidebar({
-  ...props
-}) {
+export function AppSidebar({ ...props }) {
+  //Logout Function
+  const { fetchLogout } = useAuthStore();
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-      <h1>Header</h1>
+        <h1>Header</h1>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
@@ -59,6 +61,10 @@ export function AppSidebar({
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <SidebarFooter>
+        <h1>Footer</h1>
+        <button onClick={() => fetchLogout()}>Logout</button>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
