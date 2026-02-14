@@ -25,13 +25,14 @@ export function AddAccountDialog({accountType}) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Account</Button>
+        <Button variant="outline">
+          Add Account</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Account</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
+              Fill in the required information to add a new account.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={(e) => handelSubmit(e)}>
@@ -49,7 +50,7 @@ export function AddAccountDialog({accountType}) {
               </select>
             </div>
           </div>
-          <Button  className='mt-5' type="submit" disabled={!account}>Add Account</Button>
+          <Button size="sm" className='mt-5' type="submit" disabled={!account}>Add Account</Button>
         </form>
 
         {/* <DialogFooter>

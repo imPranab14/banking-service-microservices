@@ -41,10 +41,6 @@ const MainLayout = () => {
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink href="/home">Home</BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </header>

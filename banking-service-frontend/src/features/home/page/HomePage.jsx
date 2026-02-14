@@ -100,11 +100,11 @@ function HomePage() {
   return (
     <>
       {!showMoneyTransaction ? (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-          <div className="container mx-auto px-4 py-12">
-            <div className="flex justify-between items-center">
-              <div className="mb-8">
-                <h1 className="text-3xl font-bold text-slate-800 mb-2">
+        <div className="bg-gradient-to-br from-slate-50 to-slate-100">
+          <div className="container mx-auto p-4">
+            <div className="flex justify-between items-center mb-4">
+              <div className="">
+                <h1 className="text-xl font-bold text-slate-800 mb-2">
                   My Accounts
                 </h1>
                 <p className="text-slate-600">Manage your financial accounts</p>
