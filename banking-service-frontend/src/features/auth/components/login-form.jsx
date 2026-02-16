@@ -13,7 +13,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 
 const LoginFrom = () => {
-  const [email, setEmail] = useState(null);
+  const [email, setEmail] = useState("marco.shanahan@hotmail.com");
   const [password, setPassword] = useState("123");
   const navigate = useNavigate();
 

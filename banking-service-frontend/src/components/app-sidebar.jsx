@@ -13,6 +13,7 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "../features/auth/store/useAuthStore";
+import { Button } from "@/components/ui/button";
 
 // This is sample data.
 const data = {
@@ -63,7 +64,9 @@ export function AppSidebar({ ...props }) {
       </SidebarContent>
       <SidebarFooter>
         <h1>Footer</h1>
-        <button onClick={() => fetchLogout()}>Logout</button>
+        <Button size="xs" onClick={() => fetchLogout()} variant="outline">
+          Logout
+        </Button>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
