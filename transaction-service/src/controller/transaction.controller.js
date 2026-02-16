@@ -94,8 +94,8 @@ async function handelTransfer(req, res) {
       durable: true,
     });
     const queueResponse = channel.publish(
-      "banking-exchange",
-      "transfer.initiated", //routing key
+      "banking-exchange",//IMPORTANT Exchange Name
+      "transfer.initiated", //IMPORTANT Routing Key
       Buffer.from(
         JSON.stringify({
           eventId: uuidv4(),
@@ -107,6 +107,8 @@ async function handelTransfer(req, res) {
         contentType: "application/json",
       },
     );
+
+    console.log("RabbitMQ Initiated Payload",Payload);
 
     //Api Response
     res.status(202).send({

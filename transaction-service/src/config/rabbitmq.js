@@ -7,10 +7,11 @@ async function connectRabbitMQ() {
     const channel = await connection.createChannel();
     //console.log("Transaction RabbitMQ Channel",channel);
     logger.info("RabbitMQ Connected !");
-    //Check Exchange Exits OR NOT
+    //NOTE Check Exchange Exits OR NOT || If it does NOT exist → create it
     channel.assertExchange("banking-exchange", "topic", {
       durable: true,
     });
+
     //Create A Queue (transfer-debit-failed-queue)
     channel.assertQueue("transfer-debit-failed-queue", {
       durable: true,
