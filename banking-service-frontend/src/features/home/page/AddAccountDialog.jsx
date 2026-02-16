@@ -9,35 +9,45 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
-export function AddAccountDialog({accountType}) {
+export function AddAccountDialog({ accountType }) {
   const [account, setAccount] = useState("");
-  const [open,setOpen]=useState(false)
+  const [open, setOpen] = useState(false);
   const handelSubmit = (e) => {
     e.preventDefault();
     //Send To Parent Component
-    accountType(account)
-   setOpen(false)
+    accountType(account);
+    setOpen(false);
   };
+
+  console.log("account",account);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          Add Account</Button>
+        <Button variant="outline">Add Account</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Account</DialogTitle>
           <DialogDescription>
-              Fill in the required information to add a new account.
+            Fill in the required information to add a new account.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={(e) => handelSubmit(e)}>
           <div className="grid gap-4">
-            <div className="grid gap-3">
+            {/* <div className="grid gap-3">
               <select
                 value={account}
                 onChange={(e) => setAccount(e.target.value)}
@@ -48,9 +58,25 @@ export function AddAccountDialog({accountType}) {
                 <option value="current">Current</option>
                 <option value="savings">Savings</option>
               </select>
-            </div>
+            </div> */}
           </div>
-          <Button size="sm" className='mt-5' type="submit" disabled={!account}>Add Account</Button>
+
+          <Select value={account}  onValueChange={(e) => setAccount(e)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Account" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Select Account</SelectLabel>
+                <SelectItem value="current">Current</SelectItem>
+                <SelectItem value="savings">Saving</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Button size="sm" className="mt-5" type="submit" disabled={!account}>
+            Add Account
+          </Button>
         </form>
 
         {/* <DialogFooter>
