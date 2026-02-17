@@ -24,7 +24,7 @@ async function handelUserRegister(req, res) {
     const hashPassword = await bcrypt.hash(password, 10);
     const saveData = await User.insertOne({
       name,
-      email:email.toLowerCase(),
+      email: email.toLowerCase(),
       password: hashPassword,
     });
     //Rabbit MQ Connection
@@ -43,11 +43,11 @@ async function handelUserRegister(req, res) {
         JSON.stringify({
           name,
           email,
-        })
+        }),
       ),
       {
         persistent: true,
-      }
+      },
     );
 
     //Register api response
@@ -55,7 +55,7 @@ async function handelUserRegister(req, res) {
       new ApiResponse(201, "new user create successfully", {
         name: saveData.name,
         email: saveData.email,
-      })
+      }),
     );
   } catch (error) {
     console.log("Register Service Error", error);
@@ -93,21 +93,22 @@ async function handelLoginUser(req, res) {
 
     //Generated Token
     const token = await generatedToken(email);
-    //Redis Token EXpire in 1hour
+    //NOTE Redis Token EXpire in 1hour
     const tokenSaveRedis = await redisClient.setEx(
       `token-${email}`,
       60 * 60,
-      token
+      token,
     );
+
+    console.log("tokenSaveRedis",tokenSaveRedis);
     if (tokenSaveRedis != "OK")
-      res
-        .status(500)
+      res.status(500)
         .json(
           res
             .status(400)
-            .json(new ApiResponse(400, "Failed to save token in redis client"))
+            .json(new ApiResponse(400, "Failed to save token in redis client")),
         );
-    //Set Cookies in header
+    //Set Access Token Cookies in header 
     res.cookie("token", token, {
       maxAge: 60 * 60 * 1000, // 1 hour
       httpOnly: true,
@@ -121,7 +122,7 @@ async function handelLoginUser(req, res) {
         email: isEmail?.email,
         accessToken: token,
         tokenType: "Bearer",
-      })
+      }),
     );
   } catch (error) {
     console.log("Login Service Error", error);
@@ -135,7 +136,7 @@ async function handelLogout(req, res) {
   //After successfully delete redis return 1
 
   const deleteRedis = await redisClient.del(
-    `token-${req.headers["x-user-email"]}`
+    `token-${req.headers["x-user-email"]}`,
   );
   console.log("deleteRedis", !deleteRedis);
   if (!deleteRedis) {

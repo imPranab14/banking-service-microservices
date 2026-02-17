@@ -7,7 +7,7 @@ function createAuthStore(set) {
   return {
     authUser: null,
     error: "",
-    //Login Api Call
+    //Login API Call
     fetchLogin: async function (data) {
       try {
         const response = await loginApi(data);
@@ -19,10 +19,11 @@ function createAuthStore(set) {
         }
       } catch (error) {
         set({
-          error: `${error.message}`,
+          error:`${error.message}`,
         });
       }
     },
+    //Logout API Call
     fetchLogout: async () => {
       try {
         const response = await logoutApi();

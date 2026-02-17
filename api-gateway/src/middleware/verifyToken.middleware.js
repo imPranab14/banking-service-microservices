@@ -22,7 +22,6 @@ async function verifyToken(req, res, next) {
   try {
     //Verify Token
     const decode = jwt.verify(token, process.env.JWT_SECRET);
-    ;
 
     //Check token in redis
     const redisToken = await redisClient.get(`token-${decode.emailId}`);
