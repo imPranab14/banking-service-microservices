@@ -17,7 +17,7 @@ async function loginApi(payload) {
     return response;
   } catch (error) {
     console.log("Login form error", error);
-    throw Error
+    throw error
   }
 }
 

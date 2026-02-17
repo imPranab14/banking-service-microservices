@@ -11,15 +11,14 @@ import { Button } from "@/components/ui/button";
 import { LoginSchema } from "../schema/auth.schema";
 import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
-
+import toast, { Toaster } from "react-hot-toast";
 const LoginFrom = () => {
   const [email, setEmail] = useState("marco.shanahan@hotmail.com");
   const [password, setPassword] = useState("123");
   const navigate = useNavigate();
 
-
   //Zustand Store Call
-  const { error,fetchLogin } = useAuthStore();
+  const { error, fetchLogin, authUser } = useAuthStore();
   //Handel Login From
   async function handelLogin(e) {
     e.preventDefault();
@@ -30,9 +29,17 @@ const LoginFrom = () => {
     };
     //Zod Schema Validation
     const { data } = LoginSchema.safeParse(loginReqData);
+    console.log("Submit_Data", data);
     //Login API Call
     await fetchLogin(data);
-    navigate("/home");
+    if (authUser) {
+      navigate("/home");
+    }
+  }
+  console.log("error", error);
+  //Throw login error
+  if (error) {
+    toast.error(error);
   }
 
   return (
@@ -75,7 +82,7 @@ const LoginFrom = () => {
           </Field>
         </FieldGroup>
       </form>
-      
+      <Toaster />
     </>
   );
 };

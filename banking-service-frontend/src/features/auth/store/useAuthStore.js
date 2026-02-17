@@ -19,7 +19,7 @@ function createAuthStore(set) {
         }
       } catch (error) {
         set({
-          error: `Invalid credentials ${error.message}`,
+          error: `${error.message}`,
         });
       }
     },
