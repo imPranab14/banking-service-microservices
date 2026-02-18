@@ -7,20 +7,24 @@ function createAuthStore(set) {
   return {
     authUser: null,
     error: "",
-    //Login API Call
+    //NOTE Login API Call
     fetchLogin: async function (data) {
       try {
         const response = await loginApi(data);
-        console.log("Login Api Response", response);
         if (response.status === 200) {
           set({
-            authUser: response.data,
+            authUser: response.data?.data.email, //Only User Email
+            error: "",
           });
         }
+        //Login Success
+        return true;
       } catch (error) {
         set({
-          error:`${error.message}`,
+          error: `${error.message}`,
         });
+        //If Login failed
+        return false;
       }
     },
     //Logout API Call

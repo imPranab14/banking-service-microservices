@@ -4,9 +4,12 @@ import { useAuthStore } from "../features/auth/store/useAuthStore";
 
 const ProtectedRoute = () => {
   const { authUser } = useAuthStore();
-  console.log("auth",authUser);
-
-  return authUser ? <Outlet /> : <Navigate to="/" replace />;
+  console.log("Auth_User_Info", authUser);
+  //If user not present 
+  if (!authUser) {
+    return <Navigate to="/" replace />;
+  }
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

@@ -100,15 +100,13 @@ async function handelLoginUser(req, res) {
       token,
     );
 
-    console.log("tokenSaveRedis",tokenSaveRedis);
-    if (tokenSaveRedis != "OK")
-      res.status(500)
-        .json(
-          res
-            .status(400)
-            .json(new ApiResponse(400, "Failed to save token in redis client")),
-        );
-    //Set Access Token Cookies in header 
+    console.log("tokenSaveRedis");
+    if (tokenSaveRedis !== "OK") {
+      return res
+        .status(500)
+        .json(new ApiResponse(500, "Failed to save token in redis client"));
+    }
+    //Set Access Token Cookies in header
     res.cookie("token", token, {
       maxAge: 60 * 60 * 1000, // 1 hour
       httpOnly: true,
@@ -118,7 +116,6 @@ async function handelLoginUser(req, res) {
     //Login successfully json response
     res.status(200).send(
       new ApiResponse(200, "Login successfully", {
-        name: isEmail?.name,
         email: isEmail?.email,
         accessToken: token,
         tokenType: "Bearer",

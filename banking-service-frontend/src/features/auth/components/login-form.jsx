@@ -29,14 +29,12 @@ const LoginFrom = () => {
     };
     //Zod Schema Validation
     const { data } = LoginSchema.safeParse(loginReqData);
-    console.log("Submit_Data", data);
-    //Login API Call
-    await fetchLogin(data);
-    if (authUser) {
+    const success = await fetchLogin(data);
+    //NOTE If login success
+    if (success) {
       navigate("/home");
     }
   }
-  console.log("error", error);
   //Throw login error
   if (error) {
     toast.error(error);
