@@ -42,22 +42,40 @@ All client requests pass through the **API Gateway**, which routes requests to t
 
 ---
 
-# 🛠 Tech Stack
+## 🛠 Tech Stack
 
 ### Backend
-- Node.js
-- TypeScript
-- Express.js
+- **Node.js** – Runtime environment
+- **TypeScript** – Type-safe JavaScript
+- **Express.js** – Backend framework
+
+### Frontend
+- **React** – Frontend library
+- **React Router** – Client-side routing
+- **React Query** – Server state management
+- **React Hook Form** – Form handling
+- **Zod** – Schema validation
+- **Zustand** – Lightweight state management
+- **Axios** – API communication
+
+### UI & Styling
+- **Tailwind CSS** – Utility-first styling
+- **Radix UI** – Accessible UI components
+- **Lucide React** – Icon library
+- **clsx / tailwind-merge / class-variance-authority** – Styling utilities
+- **React Hot Toast** – Notifications
 
 ### Architecture
-- Microservices Architecture
-- REST API
-- API Gateway Pattern
+- **Microservices Architecture**
+- **RESTful APIs**
+- **API Gateway Pattern**
 
-### Infrastructure
-- Redis
-- Apache Kafka / RabbitMQ
-- Docker & Docker Compose
+### Infrastructure & Messaging
+- **Redis** – Caching and session management
+- **Apache Kafka / RabbitMQ** – Event-driven communication
 
+### DevOps
+- **Docker**
+- **Docker Compose**
 ---
 
